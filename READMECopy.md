@@ -1,2 +1,0 @@
-# SAMPLE READ ME
-something
