@@ -12,6 +12,7 @@ import FlatListSampleScreen from './samples/FlatList.js';
 
 import DrawerApp from './DrawerApp.js';
 import AuthApp from './AuthApp.js';
+import ReactOverviewApp from './ReactOverviewApp.js';
 
 class HomeScreen extends React.Component {
   
@@ -88,4 +89,4 @@ class ReactSamplesApp extends React.Component {
   }
 }
 
-export default AuthApp;
+export default ReactOverviewApp;
