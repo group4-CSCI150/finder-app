@@ -1,92 +1,62 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+import React, { useState } from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-/* Sample Apps */
-import NavigatorSampleScreen from './samples/Navigator.js';
-import TextInputSampleScreen from './samples/TextInput.js';
-import ButtonSampleScreen from './samples/Button.js';
-import ScrollViewSampleScreen from './samples/ScrollView.js';
-import FlatListSampleScreen from './samples/FlatList.js';
+import AppNavigator from './navigation/AppNavigator';
 
-import DrawerApp from './DrawerApp.js';
-import AuthApp from './AuthApp.js';
-import ReactOverviewApp from './ReactOverviewApp.js';
+export default function App(props) {
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
 
-class HomeScreen extends React.Component {
-  
-  render() {
+  if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Button
-          title="Navigator Sample"
-          onPress={() => this.props.navigation.navigate('NavigatorSample')}
-        />
-        <Button
-          title="Text Input Sample"
-          onPress={() => this.props.navigation.navigate('TextInputSample')}
-        />
-        <Button
-          title="Button Sample"
-          onPress={() => this.props.navigation.navigate('ButtonSample')}
-        />
-        <Button
-          title="ScrollView Sample"
-          onPress={() => this.props.navigation.navigate('ScrollViewSample')}
-        />
-        <Button
-          title="FlatList Sample"
-          onPress={() => this.props.navigation.navigate('FlatListSample')}
-        />
+      <AppLoading
+        startAsync={loadResourcesAsync}
+        onError={handleLoadingError}
+        onFinish={() => handleFinishLoading(setLoadingComplete)}
+      />
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <AppNavigator />
       </View>
     );
   }
 }
 
-// Create stack navigator with two screens
-const AppNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-    },
-    NavigatorSample: {
-      screen: NavigatorSampleScreen,
-    },
-    TextInputSample: {
-      screen: TextInputSampleScreen,
-    },
-    ButtonSample: {
-      screen: ButtonSampleScreen,
-    },
-    ScrollViewSample: {
-      screen: ScrollViewSampleScreen,
-    },
-    FlatListSample: {
-      screen: FlatListSampleScreen,
-    }
-  }, 
-  {
-    initialRouteName: 'Home',
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: '#f4511e',
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    },
-  }
-);
-
-const AppContainer = createAppContainer(AppNavigator);
-
-class ReactSamplesApp extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
+async function loadResourcesAsync() {
+  await Promise.all([
+    Asset.loadAsync([
+      require('./assets/images/robot-dev.png'),
+      require('./assets/images/robot-prod.png'),
+    ]),
+    Font.loadAsync({
+      // This is the font that we are using for our tab bar
+      ...Ionicons.font,
+      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
+      // remove this if you are not using it in your app
+      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+    }),
+  ]);
 }
 
-export default ReactOverviewApp;
+function handleLoadingError(error) {
+  // In this case, you might want to report the error to your error reporting
+  // service, for example Sentry
+  console.warn(error);
+}
+
+function handleFinishLoading(setLoadingComplete) {
+  setLoadingComplete(true);
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
