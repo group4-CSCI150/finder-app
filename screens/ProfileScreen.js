@@ -20,10 +20,6 @@ export default function ProfileScreen() {
   );
 }
 
-ProfileScreen.navigationOptions = {
-  title: "Profile"
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

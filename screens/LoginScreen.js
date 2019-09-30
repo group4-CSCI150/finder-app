@@ -20,10 +20,6 @@ export default function LoginScreen() {
   );
 }
 
-LoginScreen.navigationOptions = {
-  title: "Login"
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
