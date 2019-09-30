@@ -9,24 +9,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Regform from '../components/Regform';
 
 import { MonoText } from '../components/StyledText';
 
 export default function RegisterScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Register Screen</Text>
+    <View style={style.container}>
+      <Regform />
     </View>
   );
 }
 
-RegisterScreen.navigationOptions = {
-  title: "Register"
-};
-
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
 });
