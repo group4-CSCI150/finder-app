@@ -3,10 +3,8 @@ import React, { Component } from 'react';
 import { Container, Card, CardItem, Body, Text, Input, Form, Button, Item, Label, Row } from 'native-base';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
   Linking
 } from 'react-native';
@@ -49,7 +47,7 @@ export default class LoginScreen extends Component {
               </Item>
               <Item floatingLabel>
                 <Label>Password</Label>
-                <Input onChangeText={this.handlePasswordChange} />
+                <Input secureTextEntry={true} onChangeText={this.handlePasswordChange} />
               </Item>
               <Button style={styles.buttonLogin} onPress={() => this.setState({ message: "Login Pressed" })}>
                 <Text style={{ textAlign: "center" }}>Login</Text>
@@ -62,9 +60,6 @@ export default class LoginScreen extends Component {
               <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={() => Linking.openURL('http://google.com')}>Forgot Your{"\n"} Password?</Text>
             </View>
           </Card>
-          <Text style={{ marginTop: 20 }}>Message: {this.state.message}</Text>
-          <Text style={{ marginTop: 20 }}>Email: {this.state.email}</Text>
-          <Text style={{ marginTop: 20 }}>Password: {this.state.password}</Text>
         </Container>
 
 
