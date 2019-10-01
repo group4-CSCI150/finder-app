@@ -1,15 +1,14 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
-import { Container, Card, CardItem, Body, Text, Input, Form, Button, Item, Label } from 'native-base';
+import { Container, Card, CardItem, Body, Text, Input, Form, Button, Item, Label, Row } from 'native-base';
 import {
   Image,
   Platform,
   ScrollView,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   View,
-  ImageBackgound
+  Linking
 } from 'react-native';
 
 export default class LoginScreen extends Component {
@@ -18,6 +17,7 @@ export default class LoginScreen extends Component {
     this.state = {
       email: "",
       password: "",
+      message: ""
     };
   }
 
@@ -28,6 +28,7 @@ export default class LoginScreen extends Component {
   handlePasswordChange = (e) => {
     this.setState({ password: e });
   }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -38,24 +39,32 @@ export default class LoginScreen extends Component {
           </Text>
         </View>
         <Container>
-          <Form>
-            <Item floatingLabel>
-              <Label>Username</Label>
-              <Input onChangeText={this.handleEmailChange}/>
-            </Item>
-            <Item floatingLabel>
-              <Label>Password</Label>
-              <Input onChangeText={this.handlePasswordChange}/>
-            </Item>
-            <Button style={styles.button}>
-              <Text style={{ textAlign: "center" }}>Login</Text>
-            </Button>
-          </Form>
+          <Card style={{paddingBottom:20}}>
+            <Form>
+              <Item floatingLabel>
+                <Label>Username</Label>
+                <Input onChangeText={this.handleEmailChange} />
+              </Item>
+              <Item floatingLabel>
+                <Label>Password</Label>
+                <Input onChangeText={this.handlePasswordChange} />
+              </Item>
+              <Button style={styles.buttonLogin} onPress={() => this.setState({ message: "Login Pressed" })}>
+                <Text style={{ textAlign: "center" }}>Login</Text>
+              </Button>
+            </Form>
+            <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 10 }}>
+              <Button style={styles.buttonSigup} onPress={() => this.setState({ message: "Signup Pressed" })}>
+                <Text style={{ textAlign: "center" }}>SignUp</Text>
+              </Button>
+              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={() => Linking.openURL('http://google.com')}>Forgot Your{"\n"} Password?</Text>
+            </View>
+          </Card>
+          <Text style={{ marginTop: 20 }}>Message: {this.state.message}</Text>
+          <Text style={{ marginTop: 20 }}>Email: {this.state.email}</Text>
+          <Text style={{ marginTop: 20 }}>Password: {this.state.password}</Text>
         </Container>
 
-
-        <Text>email: {this.state.email}</Text>
-        <Text>pasword: {this.state.password}</Text>
 
       </ScrollView>
     );
@@ -83,11 +92,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingRight: 45
   },
-  button: {
+  buttonLogin: {
     backgroundColor: '#214786',
     alignSelf: "center",
     justifyContent: "center",
-    margin: 5,
+    marginTop: 20,
+    marginBottom: 5,
     width: '90%'
+  },
+  buttonSigup: {
+    backgroundColor: '#ac1a2f',
+    alignSelf: "center",
+    justifyContent: "center",
+    width: '30%'
   }
 });
