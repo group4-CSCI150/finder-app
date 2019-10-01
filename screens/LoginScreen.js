@@ -30,6 +30,8 @@ export default class LoginScreen extends Component {
   }
 
   render() {
+    const {navigate} = this.props.navigation;
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -54,7 +56,7 @@ export default class LoginScreen extends Component {
               </Button>
             </Form>
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 10 }}>
-              <Button style={styles.buttonSigup} onPress={() => this.setState({ message: "Signup Pressed" })}>
+              <Button style={styles.buttonSigup} onPress={() => navigate('Register')}>
                 <Text style={{ textAlign: "center" }}>SignUp</Text>
               </Button>
               <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={() => Linking.openURL('http://google.com')}>Forgot Your{"\n"} Password?</Text>
