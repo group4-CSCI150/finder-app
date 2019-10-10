@@ -4,8 +4,6 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const config = {
@@ -28,46 +26,14 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-home`
+          : 'md-home'
       }
     />
   ),
 };
 
 HomeStack.path = '';
-
-const LoginStack = createStackNavigator(
-  {
-    Login: LoginScreen,
-  },
-  config
-);
-
-LoginStack.navigationOptions = {
-  tabBarLabel: 'Login',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
-
-LoginStack.path = '';
-
-const RegisterStack = createStackNavigator(
-  {
-    Register: RegisterScreen,
-  },
-  config
-);
-
-RegisterStack.navigationOptions = {
-  tabBarLabel: 'Register',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
-
-RegisterStack.path = '';
 
 const ProfileStack = createStackNavigator(
   {
@@ -79,7 +45,7 @@ const ProfileStack = createStackNavigator(
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
   ),
 };
 
@@ -88,8 +54,6 @@ ProfileStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   ProfileStack,
-  LoginStack,
-  RegisterStack,
 });
 
 tabNavigator.path = '';
