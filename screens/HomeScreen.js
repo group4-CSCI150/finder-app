@@ -160,6 +160,7 @@ function FriendRecommendation(props) {
       )
     );
     setShouldDisplayFriend(false);
+    setFriendLoaded(false);
   }
 
   if (!shouldDisplayFriend) {
