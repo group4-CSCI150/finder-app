@@ -21,6 +21,7 @@ import {
   Linking
 } from 'react-native';
 import { jsxExpressionContainer } from '@babel/types';
+import {getUserById} from '../utils/apiCaller'
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -28,7 +29,8 @@ export default class LoginScreen extends Component {
     this.state = {
       email: "",
       password: "",
-      message: ""
+      message: "",
+      isLoggedIn: false
     };
   }
 
@@ -40,20 +42,25 @@ export default class LoginScreen extends Component {
     this.setState({ password: e });
   }
 
-  clickMe = async () => {
-    const users = await fetch('https://us-central1-test150project.cloudfunctions.net/api/user/test1', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    const json = await users.json();
-    this.setState({message: JSON.stringify(json)});
+  callAPI = async () => {
+    try {
+      const users = await fetch('https://us-central1-test150project.cloudfunctions.net/api/user/test1', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await users.json();
+      this.setState({ message: JSON.stringify(json) });
+    }
+    catch {
+      this.setState({message: "Something went wrong plz try again"})
+    }
   }
 
   render() {
     const { navigate } = this.props.navigation;
-
+    if(!this.state.isLoggedIn){}
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -73,15 +80,15 @@ export default class LoginScreen extends Component {
                 <Label>Password</Label>
                 <Input secureTextEntry={true} onChangeText={this.handlePasswordChange} />
               </Item>
-              <Button style={styles.buttonLogin} onPress={() => this.setState({ message: "Login Pressed" })}>
+              <Button style={styles.buttonLogin} onPress={() => { navigate('Main')}}>
                 <Text style={{ textAlign: "center" }}>Login</Text>
               </Button>
             </Form>
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 10 }}>
-              <Button style={styles.buttonSigup} onPress={this.clickMe}>
+              <Button style={styles.buttonSigup} onPress={() => { navigate('Register') }}>
                 <Text style={{ textAlign: "center" }}>SignUp</Text>
               </Button>
-              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={() => Linking.openURL('http://google.com')}>Forgot Your{"\n"} Password?</Text>
+              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={this.callAPI}>Forgot Your{"\n"} Password?</Text>
             </View>
             <Text>{this.state.message}</Text>
           </Card>
