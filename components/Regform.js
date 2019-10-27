@@ -31,19 +31,28 @@ import RadioForm, {
 	RadioButtonLabel
 } from 'react-native-simple-radio-button';
 import { jsxExpressionContainer } from '@babel/types';
+import ValidationComponent from 'react-native-form-validator';
 
 var ToS = [
 	{label: "Term of Service", value: 0},
 ]
 
-export default class RegForm extends Component {
+export default class RegForm extends ValidationComponent {
 	constructor(props){
 		super(props);
 		this.state = {text_username: ''};
+		this.state = {text_DOB: ''};
 		this.state = {text_email: ''};
 		this.state = {text_password: ''};
 		this.state = {text_confirmPW: ''};
-	  }
+		this.chkInfo = this.chkInfo.bind(this);
+	}
+	chkInfo() {
+		const fsEmail = this.validate({
+			text_email: {email: true}
+		});
+		this.setState({fsEmail})
+	}
  render() {
 	return (
 		<ScrollView style={style.container}>
@@ -70,8 +79,15 @@ export default class RegForm extends Component {
 				<TextInput 
 					style={style.textInput} 
 					placeholder="Fresno State Email" 
-					onChangeText={(text_email) => this.setState({text_email})}
+					onChangeText={(email) => this.setState({text_email :email})}
 					value={this.state.text_email}
+					underlineColorAndroid={'transparent'}
+				/>
+				<Text>Date of Birth:</Text>
+				<TextInput 
+					style={style.textInput} 
+					onChangeText={(text_DOB) => this.setState({text_DOB})}
+					value={this.state.text_DOB}
 					underlineColorAndroid={'transparent'}
 				/>
 				<Text>Password:</Text>
@@ -96,9 +112,13 @@ export default class RegForm extends Component {
 						radio_props={ToS}
 						onPress={(value) => 1}
 				/>	
-				<TouchableOpacity style={style.button}>
+				<TouchableOpacity style={style.button} onPress={this.chkInfo}>
 					<Text style={style.btnText}>Sign Up</Text>
 				</TouchableOpacity>
+					{this.isFieldInError('text_email') && this.getErrorsInField('text_email').map(errorMessage => <Text>{errorMessage}</Text>)}
+				<Text>
+					{this.getErrorMessages()}
+			  	</Text>
 			</View>
 		</ScrollView>
 	);
