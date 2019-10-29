@@ -9,19 +9,15 @@ import {StyleSheet,
         TouchableOpacity,
       } from 'react-native'; 
 
-
-
 export default class showProfile extends Component{
   constructor(props){
     super(props);
-    obj = new Edit();
     this.state = {
       name: "name",
       desc: "description",
       tag: "tag",
     };
   }
-
 
   render(){
     return(
@@ -38,18 +34,14 @@ export default class showProfile extends Component{
         <Text style={style.default_profile}>{this.state.desc}</Text>
         <Text style={style.default_profile}>{this.state.tag}</Text>
 
-        <Button style={style.buttonStyle} onPress={() => obj.Edit}>
+        <TouchableOpacity style={style.buttonContainer} onPress={() => alert('Go to Edit')}>
           <Text style={style.buttonFont}>Edit Profile</Text>
-        </Button>
+        </TouchableOpacity>
 
       </View>
       </View>
     );
   }
-}
-
-class Edit extends Component{
-
 }
 
 // STYLE
@@ -59,13 +51,13 @@ const style = StyleSheet.create({
     backgroundColor: '#fff',
   },
 
-  buttoncontainer: {
-    height: 25,
+  buttonContainer: {
+    height: 30,
     paddingVertical: 20,
     backgroundColor: '#dc143c',
     alignSelf: "center",
     justifyContent: "center",
-    marginTop: 60,
+    marginTop: 70,
     width: '60%'
   },
 
@@ -73,18 +65,17 @@ const style = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      padding: 30,
+      padding: 15,
       backgroundColor: '#ffffff',  
       borderColor: '#214786',
       borderWidth: 5
     },
 
     profilepicWrap: {
-      width: 200,
-      height: 200,
-      borderRadius: 190,
+      width: 250,
+      height: 250,
       borderColor: '#214786',   
-      borderWidth: 2
+      borderWidth: 1
     },
 
     profilepic: {
@@ -103,16 +94,6 @@ const style = StyleSheet.create({
       borderColor: 'black',
       borderWidth: 1,
     },
-
-    // added temporarily
-    buttonStyle: {
-      backgroundColor: '#dc143c',
-      alignSelf: "center",
-      justifyContent: "center",
-      marginTop: 45,
-      width: '60%'
-    },
-    // added temporarily
     
 // Text styles
     headerFont: {
@@ -125,10 +106,10 @@ const style = StyleSheet.create({
     },
 
     default_profile: {
-      padding: 10,
+      padding: 4,
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: 26,
+      fontSize: 25,
       color: '#000',   
     },
 
