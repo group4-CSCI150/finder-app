@@ -19,6 +19,8 @@ import {
 
 import { MonoText } from '../components/StyledText';
 
+import ImageSwiper from '../components/components';
+
 
 /*
   Needed for LayoutAnimation to work on Android
@@ -224,8 +226,17 @@ export default function HomeScreen(props) {
           <Text style={styles.headerTextTitle}>Home</Text>
         </View>
       </View>
-      <FriendRecommendation />
-      <ActivityFeed />
+      <ScrollView bounces={'false'}> 
+        <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
+                              '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']} />
+        <ActivityFeed />
+        
+        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
+        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
+        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
+        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
+        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
