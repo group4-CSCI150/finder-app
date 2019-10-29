@@ -115,7 +115,7 @@ export default class RegForm extends ValidationComponent {
 				<TouchableOpacity style={style.button} onPress={this.chkInfo}>
 					<Text style={style.btnText}>Sign Up</Text>
 				</TouchableOpacity>
-					{this.isFieldInError('text_email') && this.getErrorsInField('text_email').map(errorMessage => <Text>{errorMessage}</Text>)}
+					{/* {this.isFieldInError('text_email') && this.getErrorsInField('text_email').map(errorMessage => <Text>{errorMessage}</Text>)} */}
 				<Text>
 					{this.getErrorMessages()}
 			  	</Text>
