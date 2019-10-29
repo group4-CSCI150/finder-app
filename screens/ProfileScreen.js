@@ -1,64 +1,55 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  TextInput,
-  Button,
-  View,
-  Image,
-  ScrollView
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet,
+        Text,
+        TextInput,
+        View,
+        Image,
+        Button,
+        TouchableOpacity,
+      } from 'react-native'; 
 
 
-export default class profile extends Component {
-  constructor(props) {
+
+export default class showProfile extends Component{
+  constructor(props){
     super(props);
-    this.state = { text_name: '' };
-    this.state = { text_desc: '' };
-    this.state = { text_tag: '' };
+    obj = new Edit();
+    this.state = {
+      name: "name",
+      desc: "description",
+      tag: "tag",
+    };
   }
 
-  render() {
-    return (
-      <ScrollView style={style.container}>
-        <View style={style.header}>
 
-          <Text style={style.headerFont}>My Profile</Text>
+  render(){
+    return(
+      <View style={style.container}>
+      <View style={style.header}>
 
-          <View style={style.profilepicWrap}>
-            <Image source={require('../images/bulldog.png')} style={style.profilepic} />
-          </View>
+        <Text style={style.headerFont}>My Profile</Text>       
 
-          <TextInput style={style.textInput_style}
-            placeholder="Name"
-            onChangeText={(text_name) => this.setState({ text_name })}
-            value={this.state.text_name}
-          />
+        <View style={style.profilepicWrap}>
+            <Image source={require('../images/bulldog.png')} style={style.profilepic}/>
+        </View>   
 
-          <TextInput style={style.textInput_style}
-            placeholder="Description (i.e. major)"
-            onChangeText={(text_desc) => this.setState({ text_desc })}
-            value={this.state.text_desc}
-          />
+        <Text style={style.default_profile}>{this.state.name}</Text>
+        <Text style={style.default_profile}>{this.state.desc}</Text>
+        <Text style={style.default_profile}>{this.state.tag}</Text>
 
-          <TextInput style={style.textInput_style}
-            placeholder="Tags (your interests)"
-            onChangeText={(text_tag) => this.setState({ text_tag })}
-            value={this.state.text_tag}
-          />
-          <Button
-            onPress={() => {
-              alert('Confirmed Profile');
-            }}
-            title="Confirm"
-          />
+        <Button style={style.buttonStyle} onPress={() => obj.Edit}>
+          <Text style={style.buttonFont}>Edit Profile</Text>
+        </Button>
 
-        </View>
-      </ScrollView>
+      </View>
+      </View>
     );
   }
+}
+
+class Edit extends Component{
+
 }
 
 // STYLE
@@ -68,51 +59,83 @@ const style = StyleSheet.create({
     backgroundColor: '#fff',
   },
 
-  header: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 42,
-    backgroundColor: '#ffffff',
-    borderColor: '#214786',
-    borderWidth: 5
+  buttoncontainer: {
+    height: 25,
+    paddingVertical: 20,
+    backgroundColor: '#dc143c',
+    alignSelf: "center",
+    justifyContent: "center",
+    marginTop: 60,
+    width: '60%'
   },
 
-  profilepicWrap: {
-    width: 200,
-    height: 200,
-    borderRadius: 190,
-    borderColor: '#214786',
-    borderWidth: 2
-  },
+    header: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      padding: 30,
+      backgroundColor: '#ffffff',  
+      borderColor: '#214786',
+      borderWidth: 5
+    },
 
-  profilepic: {
-    flex: 1,
-    width: null,
-    alignSelf: 'stretch',
-    borderRadius: 100,
-    borderColor: '#fff',
-    borderWidth: 4
-  },
-  textInput_style: {
-    height: 50,
-    width: 250,
-    margin: 10,
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1,
-  },
+    profilepicWrap: {
+      width: 200,
+      height: 200,
+      borderRadius: 190,
+      borderColor: '#214786',   
+      borderWidth: 2
+    },
 
-  // Text styles
-  headerFont: {
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 32,
-    color: '#000',
-    fontWeight: 'bold'
-  }
+    profilepic: {
+      flex: 1,
+      width: null,
+      alignSelf: 'stretch',
+      borderRadius: 100,
+      borderColor: '#fff',    
+      borderWidth: 4
+    },
+    textInput_style: {
+      height: 50,
+      width: 250,
+      margin: 10,
+      padding: 10,
+      borderColor: 'black',
+      borderWidth: 1,
+    },
+
+    // added temporarily
+    buttonStyle: {
+      backgroundColor: '#dc143c',
+      alignSelf: "center",
+      justifyContent: "center",
+      marginTop: 45,
+      width: '60%'
+    },
+    // added temporarily
+    
+// Text styles
+    headerFont: {
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 32,
+      color: '#000',   
+      fontWeight: 'bold'
+    },
+
+    default_profile: {
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 26,
+      color: '#000',   
+    },
+
+    buttonFont: {
+      textAlign: "center",
+      color: '#fff',
+      fontSize: 20
+    }
 });
 
-
-//AppRegistry.registerComponent('profile', () => profile);
