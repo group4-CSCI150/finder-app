@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import {
   Container,
   Card,
-  CardItem,
-  Body,
   Text,
   Input,
   Form,
@@ -18,11 +16,11 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Linking,
-  AsyncStorage
 } from 'react-native';
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
+import token from '../utils/tokenFunctions'
+var validator = require('validator');
 
 const Base64 = require('js-base64').Base64;
 
@@ -33,10 +31,8 @@ export default class LoginScreen extends Component {
       username: "",
       password: "",
       message: "",
-      isLoggedIn: false
     };
   }
-
   handleUsernameChange = (e) => {
     this.setState({ username: e });
   }
@@ -45,50 +41,29 @@ export default class LoginScreen extends Component {
     this.setState({ password: e });
   }
 
-  callAPI = async () => {
-    try{
-      let user = await api.callLogin({username: this.state.username, password: this.state.password});
-      await this.storeToken(Base64.encode(JSON.stringify(user)))
-      await this.getToken()
+  _submit = async () => {
+    try {
+      if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.password)) {
+        this.setState({ message: "Credentials cannot be empty" })
+        return;
+      }
+      let user = await api.callLogin({ username: this.state.username, password: this.state.password });
+      await token.storeToken(Base64.encode(JSON.stringify(user)))
+      await token.getToken()
       this.props.navigation.navigate("Main")
     }
     catch{
-      this.setState({message: "Invalid credentials"})
-    }
-  }
-
-  storeToken = async (token) => {
-    try {
-      console.log("Storing token")
-      await AsyncStorage.setItem('token', token);
-    } catch (error) {
-      console.log("Error storing")
-    }
-  }
-
-  getToken = async () => {
-    try {
-      console.log("Reading token")
-      let val = await AsyncStorage.getItem('token');
-      console.log(Base64.decode(val))
-      return val;
-    } catch (error) {
-      console.log("Error Geting token")
-      return;
-    }
-  }
-
-  removeToken = async () => {
-    try {
-      console.log("Reading token")
-      await AsyncStorage.removeItem('token');
-    } catch (error) {
-      // Error saving data
+      this.setState({ message: "Invalid credentials" })
     }
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    let error;
+    if (this.state.message) {
+      error = <Text style={{ textAlign: "center", backgroundColor: "red" }}>{this.state.message}</Text>
+
+    }
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -99,6 +74,7 @@ export default class LoginScreen extends Component {
         </View>
         <Container>
           <Card style={{ paddingBottom: 20 }}>
+            {error}
             <Form>
               <Item floatingLabel>
                 <Label>Username</Label>
@@ -108,7 +84,7 @@ export default class LoginScreen extends Component {
                 <Label>Password</Label>
                 <Input secureTextEntry={true} onChangeText={this.handlePasswordChange} />
               </Item>
-              <Button style={styles.buttonLogin} onPress={this.callAPI}>
+              <Button style={styles.buttonLogin} onPress={this._submit}>
                 <Text style={{ textAlign: "center" }}>Login</Text>
               </Button>
             </Form>
@@ -116,21 +92,8 @@ export default class LoginScreen extends Component {
               <Button style={styles.buttonSigup} onPress={() => { navigate('Register') }}>
                 <Text style={{ textAlign: "center" }}>SignUp</Text>
               </Button>
-              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }} onPress={this.callAPI}>Forgot Your{"\n"} Password?</Text>
+              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }}>Forgot Your{"\n"} Password?</Text>
             </View>
-            <Text>{this.state.message}</Text>
-            {/* <Button style={styles.buttonSigup} onPress={() => {api.getUserById("testYoshida1") }}>
-              <Text style={{ textAlign: "center" }}>GET</Text>
-            </Button>
-            <Button style={styles.buttonSigup} onPress={() => {api.createUser({username:"Hi", userId: "testYoshida1", newField: "haha"}) }}>
-              <Text style={{ textAlign: "center" }}>POST</Text>
-            </Button>
-            <Button style={styles.buttonSigup} onPress={() => {api.updateUser("testYoshida1",{field3:"555555555", username: "testYoshida1"}) }}>
-              <Text style={{ textAlign: "center" }}>PUT</Text>
-            </Button>
-            <Button style={styles.buttonSigup} onPress={() => {api.getAllUser()}}>
-              <Text style={{ textAlign: "center" }}>GETALL</Text>
-            </Button> */}
           </Card>
         </Container>
       </ScrollView>
