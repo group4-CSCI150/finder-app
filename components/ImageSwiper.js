@@ -9,7 +9,7 @@ import {
     Animated,
     Easing,
 } from 'react-native';
-
+import FadeInFromRightView from './FadeInFromRightView';
 
 class ImageSwiperContainer extends React.Component {
     constructor(props) {
@@ -32,12 +32,13 @@ class ImageSwiperContainer extends React.Component {
         this.images = props.imgUris.map( (imgUri) => {
             imageKey++;
             return (
-                <Text key={imageKey} style={{width: this.windowWidth, height: '100%', backgroundColor: 'white'}}>
-                    <Text>Hello</Text>
-                </Text>
-                //<Image source={require('../images/stock_photo.jpg')} style={{width: '100%', height: '100%'}} />
+                <View key={imageKey} style={{width: this.windowWidth, height: '100%', padding: 0, margin: 0, backgroundColor: 'white'}}>
+                    <FadeInFromRightView>
+                        <Image source={require('../images/stock_photo.jpg')} style={{width: '100%', height: '100%', borderTopWidth: 10, borderColor: 'black'}} />
+                    </FadeInFromRightView>
+                </View>
             );
-        })
+        });
 
         this._panResponder = PanResponder.create({
             // Ask to be the responder, don't capture nested responders:
@@ -95,8 +96,10 @@ class ImageSwiperContainer extends React.Component {
     render() {
         return (
             <View style={{overflow: 'visible', height: 500, width: this.windowWidth * this.numOfImages}} {...this._panResponder.panHandlers}>
+                <View style={{position: 'absolute', width: this.windowWidth, height: 400, top: 0, left: 0}}>
+                </View>
                 <Animated.View style={{overflow: 'visible', backgroundColor: 'red', flex: 1, flexDirection: 'row', 
-                                        height: 500, width: this.windowWidth * 3, left: this.state.left}}>
+                                       left: this.state.left}}>
                     {this.images}
                 </Animated.View>
                 <ImageSwiperNav numOfImages={this.numOfImages} setCurrentImage={this.setCurrentImage} currentImage={this.state.currentImage}
