@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import ImageScreen from '../screens/imageSelect';
 
 const config = {
   headerMode: 'none',
@@ -51,9 +52,26 @@ ProfileStack.navigationOptions = {
 
 ProfileStack.path = '';
 
+const ImageStack = createStackNavigator(
+  {
+    Image: ImageScreen,
+  },
+  config
+);
+
+ImageStack.navigationOptions = {
+  tabBarLabel: 'Image',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
+  ),
+};
+
+ImageStack.path = '';
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   ProfileStack,
+  ImageStack
 });
 
 tabNavigator.path = '';
