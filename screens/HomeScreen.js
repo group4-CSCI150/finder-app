@@ -19,8 +19,9 @@ import {
 
 import { MonoText } from '../components/StyledText';
 
-import ImageSwiper from '../components/components';
-
+import ImageSwiper from '../components/ImageSwiper';
+import FadeInFromRightView from '../components/FadeInFromRightView';
+import Header from '../components/Header';
 
 /*
   Needed for LayoutAnimation to work on Android
@@ -29,44 +30,6 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-
-function FadeInFromRightView(props) {
-  const [opacity] = useState(new Animated.Value(0))  // Initial value for opacity: 0
-  const [left] = useState(new Animated.Value(50))
-
-  React.useEffect(() => {
-    Animated.parallel([
-      Animated.timing(
-        opacity,
-        {
-          toValue: 1,
-          duration: 500,
-          easing: Easing.ease,
-        }
-      ),
-      Animated.timing(
-        left,
-        {
-          toValue: 0,
-          duration: 500,
-          easing: Easing.out(Easing.ease),
-        }
-      )
-    ]).start()
-  }, [])
-
-  return (
-    <Animated.View                 // Special animatable View
-      style={{
-        ...props.style,
-        opacity: opacity,         // Bind opacity to animated value
-        left: left,
-      }}
-    >
-      {props.children}
-    </Animated.View>
-  );
-}
 
 
 function wait(timeout) {
@@ -222,11 +185,7 @@ export default function HomeScreen(props) {
 
   return ( 
     <SafeAreaView style={styles.appContainer}>
-      <View style={styles.headerContainer}>
-        <View style={styles.header}>
-          <Text style={styles.headerTextTitle}>Home</Text>
-        </View>
-      </View>
+      <Header/>
       <ScrollView bounces={'false'}> 
         <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
                               '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']} />
