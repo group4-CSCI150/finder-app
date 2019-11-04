@@ -31,29 +31,64 @@ import RadioForm, {
 	RadioButtonLabel
 } from 'react-native-simple-radio-button';
 import { jsxExpressionContainer } from '@babel/types';
-import ValidationComponent from 'react-native-form-validator';
+import api from '../utils/apiCaller'
+import token from '../utils/tokenFunctions'
+import validator from 'validator';
+
+
+const Base64 = require('js-base64').Base64;
+
 
 var ToS = [
-	{label: "Term of Service", value: 0},
+	{label: "Term of Service", value: "0"},
 ]
 
-export default class RegForm extends ValidationComponent {
+
+export default class RegForm extends Component {
 	constructor(props){
 		super(props);
-		this.state = {text_username: ''};
-		this.state = {text_DOB: ''};
-		this.state = {text_email: ''};
-		this.state = {text_password: ''};
-		this.state = {text_confirmPW: ''};
-		this.chkInfo = this.chkInfo.bind(this);
+		this.state = {
+			username: "",
+			DOB: "",
+			email: "",
+			password: "",
+			confirmPW: ""
+		};
 	}
-	chkInfo() {
-		const fsEmail = this.validate({
-			text_email: {email: true}
-		});
-		this.setState({fsEmail})
-	}
+
+	signUp = async () => {
+		// var emailDomain = this.state.email.split('@')[1].trim();
+		try {
+		  if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.DOB) || validator.isEmail(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
+			this.setState({ message: "Fields cannot be empty" });
+			return;
+		  }
+		 if (validator.isAfter(this.state.DOB["01/01/1940"])) {
+			  this.setState({message: "Not a valid date"});
+			  return;
+		  }
+		  if (validator.isEmail(this.state.email)) {
+			  this.setState({message: "Not a valid email"});
+			  return;
+		  }
+		  else if (emailDomain != "mail.fresnostate.edu") {
+				this.setState({message:"Not a Fresno State Email"})
+		  }
+		  let user = await api.createUser({username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password, confirmPW: this.state.confirmPW});
+		  await token.storeToken(Base64.encode(JSON.stringify(user)));
+		  await token.getToken();
+		  this.props.navigation.navigate("Main");
+		}
+		catch{
+		  this.setState({ message: "Invalid credentials" });
+		}
+	  }
  render() {
+    let error;
+    if (this.state.message) {
+      error = <Text style={{ textAlign: "center", backgroundColor: "red" }}>{this.state.message}</Text>
+	}
+
 	return (
 		<ScrollView style={style.container}>
 			<View style={style.containerHeader}>
@@ -66,59 +101,59 @@ export default class RegForm extends ValidationComponent {
 					Register Page
 				</Text>
 			</View>
+			<View>{error}</View>
 			<View style={style.containerTextInput}>
-				<Text style={{ marginTop: 10 }}>Username:</Text>
-				<TextInput 
-					style={style.textInput} 
-					placeholder="Fresno State Username " 
-					onChangeText={(text_username) => this.setState({text_username})}
-					value={this.state.text_username}
-					underlineColorAndroid={'transparent'}
+			<Text style={{ marginTop: 10 }}>Username:</Text>
+			<TextInput 
+				style={style.textInput} 
+				placeholder="Fresno State Username " 
+				onChangeText={(username) => this.setState({username})}
+				value={this.state.username}
+				underlineColorAndroid={'transparent'}
+			/>
+			<Text>Email:</Text>
+			<TextInput 
+				style={style.textInput} 
+				placeholder="Fresno State Email" 
+				onChangeText={(email) => this.setState({email :email})}
+				value={this.state.email}
+				underlineColorAndroid={'transparent'}
+			/>
+			<Text>Date of Birth:</Text>
+			<TextInput 
+				style={style.textInput} 
+				placeholder="mm-dd-yyyy" 
+				onChangeText={(DOB) => this.setState({DOB})}
+				value={this.state.DOB}
+				underlineColorAndroid={'transparent'}
+			/>
+			<Text>Password:</Text>
+			<TextInput 
+				secureTextEntry={true} 
+				style={style.textInput} 
+				placeholder="*********" 
+				onChangeText={(password) => this.setState({password})}
+				value={this.state.password}
+				underlineColorAndroid={'transparent'}
+			/>
+			<Text>Confirm Password:</Text>
+			<TextInput 
+				secureTextEntry={true} 
+				style={style.textInput} 
+				placeholder="*********" 
+				onChangeText={(confirmPW) => this.setState({confirmPW})}
+				value={this.state.confirmPW}
+				underlineColorAndroid={'transparent'}
 				/>
-				<Text>Email:</Text>
-				<TextInput 
-					style={style.textInput} 
-					placeholder="Fresno State Email" 
-					onChangeText={(email) => this.setState({text_email :email})}
-					value={this.state.text_email}
-					underlineColorAndroid={'transparent'}
-				/>
-				<Text>Date of Birth:</Text>
-				<TextInput 
-					style={style.textInput} 
-					onChangeText={(text_DOB) => this.setState({text_DOB})}
-					value={this.state.text_DOB}
-					underlineColorAndroid={'transparent'}
-				/>
-				<Text>Password:</Text>
-				<TextInput 
-					secureTextEntry={true} 
-					style={style.textInput} 
-					placeholder="*********" 
-					onChangeText={(text_password) => this.setState({text_password})}
-					value={this.state.text_password}
-					underlineColorAndroid={'transparent'}
-				/>
-				<Text>Confirm Password:</Text>
-				<TextInput 
-					secureTextEntry={true} 
-					style={style.textInput} 
-					placeholder="*********" 
-					onChangeText={(text_confirmPW) => this.setState({text_confirmPW})}
-					value={this.state.text_confirmPW}
-					underlineColorAndroid={'transparent'}
-					/>
 				<RadioForm
-						radio_props={ToS}
-						onPress={(value) => 1}
-				/>	
-				<TouchableOpacity style={style.button} onPress={this.chkInfo}>
-					<Text style={style.btnText}>Sign Up</Text>
-				</TouchableOpacity>
-					{/* {this.isFieldInError('text_email') && this.getErrorsInField('text_email').map(errorMessage => <Text>{errorMessage}</Text>)} */}
-				<Text>
-					{this.getErrorMessages()}
-			  	</Text>
+				radio_props={ToS}
+				initial={1}
+				onPress={value => {this.setState({value:value})}}
+			  />	
+			 <Button style={style.button} onPress={this.signUp}>
+				 <Text style={style.btnText}>Sign Up</Text>
+			 </Button>
+				
 			</View>
 		</ScrollView>
 	);
@@ -162,6 +197,7 @@ const style = StyleSheet.create({
 	btnText: {
 		color: '#fff',
 		fontWeight: 'bold',
+		marginLeft: 15
 	},
 
 	textInput: {
