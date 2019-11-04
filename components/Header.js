@@ -1,157 +1,83 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    Button,
-    TouchableHighlight,
-    Alert,
-    Modal,
-    Animated,
-    Easing,
-    Dimensions
+    TouchableOpacity,
+    StyleSheet
 } from 'react-native'; 
-
-/*
-function Option(props) {
-    if (props.isClose === true) {
-        return (
-            <View style={{width: '100%', height: 40}}>
-                <View><Text>Icon</Text></View>
-                <View><Text>Close</Text></View>
-            </View>
-        );
-    }
-    else {
-        return (
-            <View style={{width: '100%', height: 40}}>
-                <View><Text>Icon</Text></View>
-                <View><Text>{props.name}</Text></View>
-            </View>
-        );
-    }
-}
-
-function Modal(props) {
-    [bottom, setBottom] = useState(new Animated.Value(-50));
-    [opacity, setOpacity] = useState(new Animated.Value(0.0));
-
-    useEffect(() => {
-        Animated.parallel([
-            Animated.timing(
-                bottom,
-                {
-                    toValue: 0,
-                    duration: 250,
-                    easing: Easing.out(Easing.ease)
-                }
-            ),
-            Animated.timing(
-                opacity,
-                {
-                    toValue: 1.0,
-                    duration: 100,
-                    easing: Easing.out(Easing.ease)
-
-                }
-            )
-        ]).start();
-    });
-
-    var actions = props.actions.map( (action) => {
-        return (
-            <Option name={action.name} />
-        );
-    });
-
-    actions.push(
-        <Option isClose={true} />
-    )
-
-    var heightOfOptions = actions.length * 40;
-    var heightOfScreen = Dimensions.get('window').height;
-    //var heightOfExit = heightOfScreen - heightOfOptions;
-
-    if (props.visible === true) {
-        return (
-            <View style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: '#777', opacity: opacity}}>
-                <View style={{height: heightOfScreen-heightOfOptions}} />
-                <View style={{height: heightOfOptions, bottom: bottom}}>
-                    {actions}
-                </View>
-            </View>
-        );
-    }
-    else {
-        return (
-            <View style={{position: 'absolute', width: 0, height: 0}} />
-        );
-    }
-}
-*/
+import { withNavigation } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+import OptionsModal from './OptionsModal';
 
 
-function Background(props) {
-    [opacity, setOpacity] = useState(new Animated.Value(0.0));
-
-    useEffect( () => {
-        Animated.timing(
-            opacity,
-            {
-                toValue: 0.5,
-                duration: 200,
-                easing: Easing.out(Easing.ease)
-            }
-        )
-    });
-
-    if (props.visible) {
-        return (
-            <View></View>
-        );
-    }
-    else {
-        return (
-            <View></View>
-        );
-    }
-}
-
+var HEADER_HEIGHT = 50;
 
 
 /*
-props.actions is an array of objects 
+props.actions is an array of objects of the form:
+{
+    name: 'Name of option',
+    action: function() { 'action taken on press' }
+}
 */
-export default function Header(props) {
+function Header(props) {
 
     [modalVisible, setModalVisible] = useState(false);
 
-    return (
-        <View style={{width: '100%', height: 50}}>
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <View style={{marginTop: 22}}>
-                    <View>
-                    <Text>Hello World!</Text>
-
-                    <TouchableHighlight
-                        onPress={() => {
-                        this.setModalVisible(!modalVisible);
-                        }}>
-                        <Text>Hide Modal</Text>
-                    </TouchableHighlight>
+    
+    // Add back button if requested by props
+    if (props.back) {
+        var leftContent = 
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginLeft: 10}}>
+                <TouchableOpacity onPress={() => { if (props.navigation) props.navigation.goBack()}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                        <Ionicons name="ios-arrow-back" size={HEADER_HEIGHT} />
+                        <Text style={styles.headerText}>Back</Text>
                     </View>
-                </View>
-            </Modal>
+                </TouchableOpacity>
+            </View>
+    }
+
+    var middleContent = 
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.headerText}>{props.title ? props.title : 'Finder'}</Text>
+        </View>
+
+    var rightContent = 
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 10}}>
+                <TouchableOpacity onPress={() => {setModalVisible(true);}}>
+                    <Ionicons name="md-cog" size={HEADER_HEIGHT} color="black" />
+                </TouchableOpacity>
+            </View>;
+
+    return (
+        <View style={{width: '100%', height: HEADER_HEIGHT}}>
+            <OptionsModal modalVisible={modalVisible} setModalVisible={setModalVisible} actions={props.actions} />
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text>Home</Text>
-                <Text>Help</Text>
-                <Button title={'Push me'} onPress={() => {setModalVisible(true);}} />
+                <View style={styles.headerContent}>
+                    {leftContent}
+                </View>
+                <View style={styles.headerContent}>
+                    {middleContent}
+                </View>
+                <View style={styles.headerContent}>
+                    {rightContent}
+                </View>
             </View>
         </View>
     );
 }
+
+export default withNavigation(Header);
+
+
+
+var styles = StyleSheet.create({
+    headerContent: {
+        width: '33%',
+        height: HEADER_HEIGHT, 
+    },
+    headerText: {
+        fontSize: HEADER_HEIGHT * 0.5,
+    }
+});
