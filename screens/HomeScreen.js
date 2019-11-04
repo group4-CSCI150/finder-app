@@ -184,7 +184,7 @@ export default function HomeScreen(props) {
 
   return ( 
     <SafeAreaView style={styles.appContainer}>
-      <Header/>
+      <Header back={true} actions={[{name:'Hello world'}]}/>
       <ScrollView bounces={'false'}> 
         <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
                               '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']} />
