@@ -9,40 +9,86 @@ import {StyleSheet,
         TouchableOpacity,
       } from 'react-native'; 
 
-export default class showProfile extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
+let defaultView = true;
+
+  // profile view
+function Viewprofile(props){
+ this.state = {
       name: "name",
       desc: "description",
       tag: "tag",
     };
-  }
+ 
+  return (
+  <View style={style.container}>
+  <View style={style.header}>
 
-  render(){
-    return(
-      <View style={style.container}>
-      <View style={style.header}>
+    <Text style={style.headerFont}>My Profile</Text>       
 
+    <View style={style.profilepicWrap}>
+        <Image source={require('../images/bulldog.png')} style={style.profilepic}/>
+    </View>   
+
+    <Text style={style.default_profile}>{this.state.name}</Text>
+    <Text style={style.default_profile}>{this.state.desc}</Text>
+    <Text style={style.default_profile}>{this.state.tag}</Text>
+ 
+    <TouchableOpacity style={style.buttonContainer} onPress={handleEdit}>
+      <Text style={style.buttonFont}>Edit Profile</Text>
+    </TouchableOpacity>
+
+  </View>
+  </View>
+  );
+}
+
+// change value of default view to display edit page
+function handleEdit(props){
+  defaultview = false;
+  return <Profile_view_or_edit/>
+}
+
+
+// edit profile view
+function Editprofile(props){
+  return (
+    <View style={style.container}>
+    <View style={style.header}>
+    
         <Text style={style.headerFont}>My Profile</Text>       
-
+    
         <View style={style.profilepicWrap}>
             <Image source={require('../images/bulldog.png')} style={style.profilepic}/>
         </View>   
 
-        <Text style={style.default_profile}>{this.state.name}</Text>
-        <Text style={style.default_profile}>{this.state.desc}</Text>
-        <Text style={style.default_profile}>{this.state.tag}</Text>
-
-        <TouchableOpacity style={style.buttonContainer} onPress={() => alert('Go to Edit')}>
-          <Text style={style.buttonFont}>Edit Profile</Text>
-        </TouchableOpacity>
-
-      </View>
-      </View>
+    </View>
+    </View>
     );
   }
+
+    
+  // chooses to display the view or edit screen depending on edit button push
+function Profile_view_or_edit(props){
+    if(defaultView){
+      return <Viewprofile/>
+    }
+    else{
+      return <Editprofile/>
+    }
+  }
+
+export default class Profilepage extends Component{
+  constructor(props){
+    super(props);
+  }
+ 
+  render(){
+    return <Profile_view_or_edit/>
+  }
+
 }
+
+
 
 // STYLE
 const style = StyleSheet.create({
@@ -57,7 +103,7 @@ const style = StyleSheet.create({
     backgroundColor: '#dc143c',
     alignSelf: "center",
     justifyContent: "center",
-    marginTop: 70,
+    marginTop: 70,    
     width: '60%'
   },
 
@@ -72,8 +118,8 @@ const style = StyleSheet.create({
     },
 
     profilepicWrap: {
-      width: 250,
-      height: 250,
+      width: 225,
+      height: 225,
       borderColor: '#214786',   
       borderWidth: 1
     },
