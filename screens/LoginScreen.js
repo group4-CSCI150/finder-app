@@ -78,11 +78,11 @@ export default class LoginScreen extends Component {
             <Form>
               <Item floatingLabel>
                 <Label>Username</Label>
-                <Input onChangeText={this.handleUsernameChange} />
+                <Input autoCapitalize='none' onChangeText={this.handleUsernameChange} />
               </Item>
               <Item floatingLabel>
                 <Label>Password</Label>
-                <Input secureTextEntry={true} onChangeText={this.handlePasswordChange} />
+                <Input autoCapitalize='none' secureTextEntry={true} onChangeText={this.handlePasswordChange} />
               </Item>
               <Button style={styles.buttonLogin} onPress={this._submit}>
                 <Text style={{ textAlign: "center" }}>Login</Text>
