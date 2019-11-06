@@ -66,6 +66,7 @@ export default class RegForm extends Component {
 		  }
 		  else if (emailDomain[1] != "mail.fresnostate.edu") {
 			this.setState({message:"Not a Fresno State Email"})
+			return
 	  	  }
 		  else if (isNaN(formatDate[0]) || formatDate[0].length != 2 || isNaN(formatDate[1]) || formatDate[1].length != 2  || isNaN(formatDate[2]) || formatDate[2].length != 4 ) {
 			  this.setState({message: "Not a valid date"});
@@ -73,12 +74,14 @@ export default class RegForm extends Component {
 		  }
 		  else if (this.state.password != this.state.confirmPW) {
 			this.setState({message:"Password do not match"})
+			return;
 		  }
 		  else if (this.state.check == 0) {
 			this.setState({message:"Please check Term of Service"})
+			return;
 		  }
 		  let user = await api.createUser({username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password});
-		//   this.props.navigation.navigate("Main");
+		  this.props.navigation.navigate("Login");
 		}
 		catch{
 		  this.setState({ message: "One of the five fields is incorrect" });
