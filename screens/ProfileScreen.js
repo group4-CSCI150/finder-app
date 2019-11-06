@@ -9,81 +9,48 @@ import {StyleSheet,
         TouchableOpacity,
       } from 'react-native'; 
 
-let defaultView = true;
+export default class Profilepage extends Component{
+  constructor(props){
+    super(props);
+    this.handleEdit = this.handleEdit.bind(this);
 
-  // profile view
-function Viewprofile(props){
- this.state = {
+    this.state = {
       name: "name",
       desc: "description",
       tag: "tag",
+      isEdit: false,
     };
+  }
  
-  return (
-  <View style={style.container}>
-  <View style={style.header}>
+ // change value of value to be able to edit
+ handleEdit(){
+   this.setState({isEdit: true});
 
-    <Text style={style.headerFont}>My Profile</Text>       
-
-    <View style={style.profilepicWrap}>
-        <Image source={require('../images/bulldog.png')} style={style.profilepic}/>
-    </View>   
-
-    <Text style={style.default_profile}>{this.state.name}</Text>
-    <Text style={style.default_profile}>{this.state.desc}</Text>
-    <Text style={style.default_profile}>{this.state.tag}</Text>
+ }
  
-    <TouchableOpacity style={style.buttonContainer} onPress={handleEdit}>
-      <Text style={style.buttonFont}>Edit Profile</Text>
-    </TouchableOpacity>
-
-  </View>
-  </View>
-  );
-}
-
-// change value of default view to display edit page
-function handleEdit(props){
-  defaultview = false;
-  return <Profile_view_or_edit/>
-}
-
-
-// edit profile view
-function Editprofile(props){
-  return (
-    <View style={style.container}>
-    <View style={style.header}>
+ // display view profile as default - on button press, be able to edit the text fields
+  render(){
+    return (
+      <View style={style.container}>
+      <View style={style.header}>
     
         <Text style={style.headerFont}>My Profile</Text>       
     
         <View style={style.profilepicWrap}>
             <Image source={require('../images/bulldog.png')} style={style.profilepic}/>
         </View>   
-
-    </View>
-    </View>
-    );
-  }
-
     
-  // chooses to display the view or edit screen depending on edit button push
-function Profile_view_or_edit(props){
-    if(defaultView){
-      return <Viewprofile/>
-    }
-    else{
-      return <Editprofile/>
-    }
-  }
-
-export default class Profilepage extends Component{
-  constructor(props){
-    super(props);
-  }
- 
-  render(){
-    return <Profile_view_or_edit/>
+        <TextInput editable={this.state.isEdit} style={style.default_profile}>{this.state.name}</TextInput>
+        <TextInput editable={this.state.isEdit} style={style.default_profile}>{this.state.desc}</TextInput>
+        <TextInput editable={this.state.isEdit} style={style.default_profile}>{this.state.tag}</TextInput>
+     
+        <TouchableOpacity style={style.buttonContainer} onPress={this.handleEdit}>
+          <Text style={style.buttonFont}>Edit Profile</Text>
+        </TouchableOpacity>
+    
+      </View>
+      </View>
+      );
   }
 
 }
