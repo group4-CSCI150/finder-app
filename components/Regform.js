@@ -40,9 +40,8 @@ const Base64 = require('js-base64').Base64;
 
 
 var ToS = [
-	{label: "Term of Service", value: "0"},
+	{label: "Term of Service", value: "0", width: 10},
 ]
-
 
 export default class RegForm extends Component {
 	constructor(props){
@@ -52,35 +51,37 @@ export default class RegForm extends Component {
 			DOB: "",
 			email: "",
 			password: "",
-			confirmPW: ""
+			confirmPW: "",
+			check: 0
 		};
 	}
-
+	
 	signUp = async () => {
-		// var emailDomain = this.state.email.split('@')[1].trim();
+		var emailDomain = this.state.email.split('@');
+		var formatDate = this.state.DOB.split('-');
 		try {
-		  if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.DOB) || validator.isEmail(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
+		  if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.DOB) || validator.isEmpty(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
 			this.setState({ message: "Fields cannot be empty" });
 			return;
 		  }
-		 if (validator.isAfter(this.state.DOB["01/01/1940"])) {
+		  else if (emailDomain[1] != "mail.fresnostate.edu") {
+			this.setState({message:"Not a Fresno State Email"})
+	  	  }
+		  else if (isNaN(formatDate[0]) || formatDate[0].length != 2 || isNaN(formatDate[1]) || formatDate[1].length != 2  || isNaN(formatDate[2]) || formatDate[2].length != 4 ) {
 			  this.setState({message: "Not a valid date"});
 			  return;
 		  }
-		  if (validator.isEmail(this.state.email)) {
-			  this.setState({message: "Not a valid email"});
-			  return;
+		  else if (this.state.password != this.state.confirmPW) {
+			this.setState({message:"Password do not match"})
 		  }
-		  else if (emailDomain != "mail.fresnostate.edu") {
-				this.setState({message:"Not a Fresno State Email"})
+		  else if (this.state.check == 0) {
+			this.setState({message:"Please check Term of Service"})
 		  }
-		  let user = await api.createUser({username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password, confirmPW: this.state.confirmPW});
-		  await token.storeToken(Base64.encode(JSON.stringify(user)));
-		  await token.getToken();
-		  this.props.navigation.navigate("Main");
+		  let user = await api.createUser({username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password});
+		//   this.props.navigation.navigate("Main");
 		}
 		catch{
-		  this.setState({ message: "Invalid credentials" });
+		  this.setState({ message: "One of the five fields is incorrect" });
 		}
 	  }
  render() {
@@ -149,6 +150,7 @@ export default class RegForm extends Component {
 				radio_props={ToS}
 				initial={1}
 				onPress={value => {this.setState({value:value})}}
+				onPress={()=>{this.setState({check: 1})}}
 			  />	
 			 <Button style={style.button} onPress={this.signUp}>
 				 <Text style={style.btnText}>Sign Up</Text>
