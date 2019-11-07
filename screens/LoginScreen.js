@@ -35,6 +35,18 @@ export default class LoginScreen extends Component {
       editable: true
     };
   }
+
+  async componentDidMount(){
+    let tok = await this.getToken();
+    if(tok){
+      this.props.navigation.navigate("MainNav")
+    }
+  }
+
+  getToken(){
+    return token.getToken();
+  }
+
   handleUsernameChange = (e) => {
     this.setState({ username: e });
   }
@@ -51,6 +63,7 @@ export default class LoginScreen extends Component {
       }
       this.setState({editable: false})
       let user = await api.callLogin({ username: this.state.username, password: this.state.password });
+      await token.removeToken();
       await token.storeToken(Base64.encode(JSON.stringify(user)))
       await token.getToken()
       this.props.navigation.navigate("MainNav")
