@@ -45,7 +45,7 @@ function Option(props) {
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <View style={{width: '30%', height: '100%'}}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Ionicons name='md-close' size={OPTION_HEIGHT} color='white'/>
+                            <Ionicons name={props.iconName ? props.iconName : 'md-close'} size={OPTION_HEIGHT} color='white'/>
                         </View>
                     </View>
                     <View style={{width: '70%', height: '100%'}}>
@@ -88,6 +88,14 @@ function ModalActions(props) {
     );
 }
 
+/*
+props.actions is an array of objects of the form:
+{
+    name: 'Name of option',
+    action: function() { 'action taken on press' },
+    iconName: 'Ionicons-name' // Name to use for Ionicons component
+}
+*/
 export default function OptionsModal(props) {
     return (
         <Modal

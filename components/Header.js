@@ -13,13 +13,6 @@ import OptionsModal from './OptionsModal';
 var HEADER_HEIGHT = 50;
 
 
-/*
-props.actions is an array of objects of the form:
-{
-    name: 'Name of option',
-    action: function() { 'action taken on press' }
-}
-*/
 function Header(props) {
 
     [modalVisible, setModalVisible] = useState(false);
