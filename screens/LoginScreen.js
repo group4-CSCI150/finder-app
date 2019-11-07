@@ -16,6 +16,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  ActivityIndicator
 } from 'react-native';
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
@@ -31,6 +32,7 @@ export default class LoginScreen extends Component {
       username: "",
       password: "",
       message: "",
+      editable: true
     };
   }
   handleUsernameChange = (e) => {
@@ -47,12 +49,14 @@ export default class LoginScreen extends Component {
         this.setState({ message: "Credentials cannot be empty" })
         return;
       }
+      this.setState({editable: false})
       let user = await api.callLogin({ username: this.state.username, password: this.state.password });
       await token.storeToken(Base64.encode(JSON.stringify(user)))
       await token.getToken()
-      this.props.navigation.navigate("Main")
+      this.props.navigation.navigate("MainNav")
     }
     catch{
+      this.setState({editable: true})
       this.setState({ message: "Invalid credentials" })
     }
   }
@@ -62,8 +66,12 @@ export default class LoginScreen extends Component {
     let error;
     if (this.state.message) {
       error = <Text style={{ textAlign: "center", backgroundColor: "red" }}>{this.state.message}</Text>
-
     }
+    let loading;
+    if(!this.state.editable){
+      loading = <ActivityIndicator size="large" color="#0000ff" />
+    }
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.header}>
@@ -78,15 +86,16 @@ export default class LoginScreen extends Component {
             <Form>
               <Item floatingLabel>
                 <Label>Username</Label>
-                <Input autoCapitalize='none' onChangeText={this.handleUsernameChange} />
+                <Input autoCapitalize='none' editable={this.state.editable} onChangeText={this.handleUsernameChange} />
               </Item>
               <Item floatingLabel>
                 <Label>Password</Label>
-                <Input autoCapitalize='none' secureTextEntry={true} onChangeText={this.handlePasswordChange} />
+                <Input autoCapitalize='none' editable={this.state.editable} secureTextEntry={true} onChangeText={this.handlePasswordChange} />
               </Item>
               <Button style={styles.buttonLogin} onPress={this._submit}>
                 <Text style={{ textAlign: "center" }}>Login</Text>
               </Button>
+              {loading}
             </Form>
             <View style={{ flexDirection: "row", justifyContent: "space-evenly", marginTop: 10 }}>
               <Button style={styles.buttonSigup} onPress={() => { navigate('Register') }}>
