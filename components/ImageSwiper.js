@@ -249,7 +249,7 @@ class ImageSwiperNavBall extends React.Component {
             <View style={{width: 50, height: 50}} {...this._panResponder.panHandlers}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Animated.View 
-                        style={{opacity: this.opacity, width: 20, height: 20, borderRadius: '50%', 
+                        style={{opacity: this.opacity, width: 20, height: 20, borderRadius: 50, 
                         backgroundColor: this.backgroundColor}}
                     />
                 </View>
