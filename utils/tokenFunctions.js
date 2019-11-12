@@ -15,8 +15,7 @@ const token = {
         try {
             console.log("Reading token")
             let val = await AsyncStorage.getItem('token');
-            console.log(Base64.decode(val))
-            return val;
+            return Base64.decode(val);
         } catch (error) {
             console.log("Error: ", error)
             alert(error)
