@@ -44,9 +44,32 @@ export default class ImagePickerExample extends React.Component {
       aspect: [5, 5],
     });
 
+    let localUri = result.uri;
+    let filename = localUri.split('/').pop();
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    // Upload the image using the fetch and FormData APIs
+    let formData = new FormData();
+    // Assume "photo" is the name of the form field the server expects
+    formData.append('photo', { uri: localUri, name: filename, type });
+
+
     if (!result.cancelled) {
-      console.log(reuslt)
+      console.log(result)
       this.setState({ image: result.uri });
     }
-  };
+
+    // return await fetch(YOUR_SERVER_URL, {
+    //   method: 'POST',
+    //   body: formData,
+    //   header: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // });
+
+    //   
+  }
 }
