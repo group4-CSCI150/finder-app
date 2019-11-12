@@ -18,6 +18,9 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
+
+import Header from '../components/Header'
+
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
@@ -36,14 +39,14 @@ export default class LoginScreen extends Component {
     };
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     let tok = await this.getToken();
-    if(tok){
+    if (tok) {
       this.props.navigation.navigate("MainNav")
     }
   }
 
-  getToken(){
+  getToken() {
     return token.getToken();
   }
 
@@ -61,7 +64,7 @@ export default class LoginScreen extends Component {
         this.setState({ message: "Credentials cannot be empty" })
         return;
       }
-      this.setState({editable: false})
+      this.setState({ editable: false })
       let user = await api.callLogin({ username: this.state.username, password: this.state.password });
       await token.removeToken();
       await token.storeToken(Base64.encode(JSON.stringify(user)))
@@ -69,7 +72,7 @@ export default class LoginScreen extends Component {
       this.props.navigation.navigate("MainNav")
     }
     catch{
-      this.setState({editable: true})
+      this.setState({ editable: true })
       this.setState({ message: "Invalid credentials" })
     }
   }
@@ -81,18 +84,20 @@ export default class LoginScreen extends Component {
       error = <Text style={{ textAlign: "center", backgroundColor: "red" }}>{this.state.message}</Text>
     }
     let loading;
-    if(!this.state.editable){
+    if (!this.state.editable) {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
 
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
+        <Header back={false} title="Login" />
+
+        {/* <View style={styles.header}>
           <Text style={styles.headerTitle}>
             <Image source={require('../images/bulldog.png')} style={{ width: 40, height: 40 }} />
             Login
           </Text>
-        </View>
+        </View> */}
         <Container>
           <Card style={{ paddingBottom: 20 }}>
             {error}
