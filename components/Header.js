@@ -13,11 +13,12 @@ import OptionsModal from './OptionsModal';
 var HEADER_HEIGHT = 50;
 
 
+/*
+    
+*/
 function Header(props) {
-
     [modalVisible, setModalVisible] = useState(false);
-
-
+    
     // Add back button if requested by props
     if (props.back) {
         var leftContent =

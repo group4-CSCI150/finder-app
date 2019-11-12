@@ -61,13 +61,15 @@ function Option(props) {
 
 function ModalActions(props) {
     var i = -1;
-    var actions = props.actions.map( (action) => {
-        i++;
-        return (
-            <Option {...props} name={action.name} action={action.action} key={i} />
-        );
-    });
-
+    var actions = [];
+    if (props.actions) {
+        props.actions.map( (action) => {
+            i++;
+            return (
+                <Option {...props} name={action.name} key={i} />
+            );
+        });
+    }
     i++;
     actions.push(
         <Option {...props} isClose={true} key={i} />
