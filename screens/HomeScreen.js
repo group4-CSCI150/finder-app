@@ -16,7 +16,7 @@ import {
   LayoutAnimation,
   UIManager,
 } from 'react-native';
-
+import token from '../utils/tokenFunctions'
 import { MonoText } from '../components/StyledText';
 
 import ImageSwiper from '../components/ImageSwiper';
@@ -182,10 +182,15 @@ function FriendRecommendation(props) {
 }
 
 export default function HomeScreen(props) {
+  const { navigate } = props.navigation;
 
+  logout = async () => {
+    await token.removeToken()
+    navigate('LoginNav')
+  }
   return ( 
     <SafeAreaView style={styles.appContainer}>
-      <Header back={true} actions={[{name:'Hello world'}]}/>
+      <Header back={true} actions={[{name:'Logout', action: logout }]}/>
       <ScrollView bounces={'false'}> 
         <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
                               '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']} />
