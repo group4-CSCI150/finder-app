@@ -40,7 +40,7 @@ function Background(props) {
 
 function Option(props) {
     return (
-        <TouchableOpacity onPress={() => { props.close(); if (props.action) props.action(); }}>
+        <TouchableOpacity onPress={() => {if (props.action) {props.action()}; props.close() }}>
             <View style={{width: '100%', height: OPTION_HEIGHT}}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <View style={{width: '30%', height: '100%'}}>
@@ -64,7 +64,7 @@ function ModalActions(props) {
     var actions = props.actions.map( (action) => {
         i++;
         return (
-            <Option {...props} name={action.name} key={i} />
+            <Option {...props} name={action.name} action={action.action} key={i} />
         );
     });
 
