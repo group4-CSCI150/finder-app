@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
+import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
 
 const config = {
   headerMode: 'none',
@@ -39,6 +40,7 @@ HomeStack.path = '';
 const SearchStack = createStackNavigator(
   {
     Search: SearchScreen,
+    AdvancedSearch: AdvancedSearchScreen,
   },
   config
 );
