@@ -15,7 +15,8 @@ const token = {
         try {
             console.log("Reading token")
             let val = await AsyncStorage.getItem('token');
-            return Base64.decode(val);
+            if(val)
+                return Base64.decode(val);
         } catch (error) {
             console.log("Error: ", error)
             alert(error)
@@ -24,7 +25,7 @@ const token = {
 
     removeToken: async () => {
         try {
-            console.log("Reading token")
+            console.log("Deleting token")
             await AsyncStorage.removeItem('token');
         } catch (error) {
             console.log("Error: ", error)

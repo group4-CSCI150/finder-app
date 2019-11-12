@@ -16,7 +16,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 
 import Header from '../components/Header'
@@ -42,6 +43,7 @@ export default class LoginScreen extends Component {
   async componentDidMount() {
     let tok = await this.getToken();
     if (tok) {
+      console.log(tok)
       this.props.navigation.navigate("MainNav")
     }
   }
@@ -68,7 +70,6 @@ export default class LoginScreen extends Component {
       let user = await api.callLogin({ username: this.state.username, password: this.state.password });
       await token.removeToken();
       await token.storeToken(Base64.encode(JSON.stringify(user)))
-      await token.getToken()
       this.props.navigation.navigate("MainNav")
     }
     catch{
