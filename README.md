@@ -1,6 +1,6 @@
 # Finder APP
 
-## Instalation
+## Installation
 To run this application you will need NodeJs. You can download it here: https://nodejs.org/en/download/
 You will also have to install expo-cli to run this application. 
 After installing NodeJs run `npm install -g expo-cli` to install expo-cli.
