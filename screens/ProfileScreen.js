@@ -114,7 +114,7 @@ export default class profilePage extends Component {
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(tag) => this.setState({ tag })}>
             {this.state.tag}</TextInput>
-
+            <Text style={style.btnText} onPress={() => { this.props.navigation.navigate("Friend") }}>Friends</Text>
           <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
             onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
             <Text style={style.buttonFont}>{this.state.buttonName}</Text>
@@ -215,6 +215,12 @@ const style = StyleSheet.create({
     textAlign: "center",
     color: '#fff',
     fontSize: 20
+  },
+  btnText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginLeft: 10,
   },
 });
 
