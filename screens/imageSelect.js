@@ -44,7 +44,6 @@ export default class ImagePickerExample extends React.Component {
       aspect: [5, 5],
     });
 
-<<<<<<< HEAD
     let localUri = result.uri;
     let filename = localUri.split('/').pop();
 
@@ -73,11 +72,5 @@ export default class ImagePickerExample extends React.Component {
 
     //   
   }
-=======
-    if (!result.cancelled) {
-      console.log(reuslt)
-      this.setState({ image: result.uri });
-    }
-  };
->>>>>>> 240ba3e72192b84f7971564c3acab789631b5c5f
+
 }
