@@ -23,24 +23,34 @@ import token from '../utils/tokenFunctions'
 import validator from 'validator';
 
 
-export default class FriendList extends Component {
+export default class FriendScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
 
     };
   }
-  getToken(){
+  getToken() {
     return token.getToken();
   }
-  getFriend = async () => {
-    let id = await token.getToken();
-    let user = await api.getUserById(id);
-    this.setState({displayFriend: user});
+  getUserById() {
+    return api.getUserById();
+  }
+
+  async getFriend() {
+    let pass = await this.getToken();
+    if (pass) {
+      console.log(pass)
+      let user = await this.getUserById();
+      this.setState({displayFriend: user });
+    }
   }
   render() {
     this.getFriend();
-    let listFriend = this.state.displayFriend;
+    let listFriend 
+    if (this.state.displayFriend) {
+      listFriend = <Text> {this.state.displayFriend} </Text>;
+    }
     return (
     <ScrollView style={style.container}>
     <View style = {style.list}>{listFriend}</View>
@@ -107,6 +117,10 @@ const style = StyleSheet.create({
   },
   list: {
     padding: 50,
+    height: 120,
+    width: 120,
+    marginTop: 15,
+    marginLeft: 15,
   }
 
 });
