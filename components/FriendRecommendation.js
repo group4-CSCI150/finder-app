@@ -13,6 +13,7 @@ import {
 import { withNavigation } from 'react-navigation';
 import FadeInFromRightView from './FadeInFromRightView';
 import { Ionicons } from '@expo/vector-icons';
+import api from '../utils/apiCaller';
 
 function wait(timeout) {
     return new Promise(resolve => {
