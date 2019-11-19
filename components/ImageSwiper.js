@@ -26,7 +26,7 @@ class ImageSwiperContainer extends React.Component {
         this.setCurrentImage = this.setCurrentImage.bind(this);     // Note: need to bind class methods
 
         /*
-        Placeholder: instead of rendering Image components, render Text saying "Hello"
+        Placeholder: instead of rendering Image components, render stock photos
         */
         var imageKey = -1;
         this.images = props.imgUris.map( (imgUri) => {
@@ -258,6 +258,11 @@ class ImageSwiperNavBall extends React.Component {
     }
 }
 
+
+/*
+    Props:
+    imgUris - An array of image uri's to be displayed. Required.
+*/
 export default function ImageSwiper(props) {
     // For PanResponder debug purposes
     [msg, setMsg] = useState('');
