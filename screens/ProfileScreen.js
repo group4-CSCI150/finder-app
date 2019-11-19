@@ -38,20 +38,19 @@ export default class profilePage extends Component {
 
   //TODO: Instead of getting user data from token, use the token to get username. 
   //      Then, call API using username to get updated user data 
-  getToken(){
-    return token.getToken();
+  getCurrUser(){
+    return api.getSelf()
   }
 
   async componentDidMount() {
-    let tok = await this.getToken();
-    tok = JSON.parse(tok).user
+    let _user = await this.getCurrUser();
 
     this.setState(
       {
-        name: tok.name,
-        desc: tok.des,
-        tag: JSON.stringify(tok.tags),
-        username: tok.username
+        name: _user.name,
+        desc: _user.des,
+        tag: JSON.stringify(_user.tags),
+        username: _user.username
       }
     )
 
