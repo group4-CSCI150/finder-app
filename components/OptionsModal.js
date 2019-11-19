@@ -90,13 +90,19 @@ function ModalActions(props) {
     );
 }
 
+
 /*
-props.actions is an array of objects of the form:
-{
-    name: 'Name of option',
-    action: function() { 'action taken on press' },
-    iconName: 'Ionicons-name' // Name to use for Ionicons component
-}
+Props:
+    actions - Required.
+    props.actions is an array of objects of the form:
+    {
+        name: 'Name of option',
+        action: function() { 'action taken on press' },
+        iconName: 'Ionicons-name' // Name to use for Ionicons component
+    }
+
+    modalVisible - Boolean, required. Tells whether or not the modal should be visible (true -> modal is visible)
+    setModalVisible - Function taking a single boolean argument, required. Updates visibility of modal.
 */
 export default function OptionsModal(props) {
     return (
