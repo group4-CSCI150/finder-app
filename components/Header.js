@@ -12,9 +12,20 @@ import OptionsModal from './OptionsModal';
 
 var HEADER_HEIGHT = 50;
 
-
 /*
+Props:
+    back - Boolean, optional. If true, adds back button.
     
+    actions - Array, optional. If passed, includes icon on right side that renders 
+              a modal displaying a list of actions.
+        actions is an array of objects of the form:
+        {
+            name: 'Name of option',
+            action: function() { 'action taken on press' },
+            iconName: 'Ionicons-name' // Name to use for Ionicons component
+        }
+    
+    title - String, optional. If passed, displays string in middle of header. Must be short or will overflow.
 */
 function Header(props) {
     [modalVisible, setModalVisible] = useState(false);

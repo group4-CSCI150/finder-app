@@ -260,8 +260,8 @@ class ImageSwiperNavBall extends React.Component {
 
 
 /*
-    Props:
-    imgUris - An array of image uri's to be displayed. Required.
+Props:
+    imgUris - Array, required. Contains strings of image uri's to be displayed.
 */
 export default function ImageSwiper(props) {
     // For PanResponder debug purposes
