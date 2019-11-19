@@ -8,23 +8,29 @@ These Functions are used to make database calls.
 Some of them receive a body as input or an username.
 body is a JSON object. e.g. {username: "Leo", password: "myPassword", email: "myemail@email.com"}
 */
+async function getCurrentUser() {
+  try {
+    let username = await token.getToken()
+    username = JSON.parse(username).user.username
+    console.log(username)
+    let user = await axios.get(`${baseURL}byID/${username}`)
+    console.log(user.data)
+    return user.data.user
+  }catch{
+    return "Error getting user"
+  }
+}
 
 const api = {
   // Gets current loggedin user
-  getCurrentUser: async () => {
+  getSelf: async () => {
     try {
-      let username = await token.getToken()
-      username = JSON.parse(username).user.username
-      console.log(username)
-      let user = await axios.get(`${baseURL}byID/${username}`)
-      console.log(user.data)
-      return user.data.user
+      return getCurrentUser()
+
     }catch{
       return "Error getting user"
     }
-
   },
-
   // Returns a single user from the DB
   getUserById: async (username) => {
     try {
@@ -92,15 +98,22 @@ const api = {
     }
   },
 
-  getRecomendations: async (body) => {
-    try {
+  getRecomendations: async () => {
+    //try {
+      let _user = await getCurrentUser()
+      let _username = _user.username
+      let _tags = _user.tags
+      let body = {
+        user: _username,
+        tags: _tags
+      }
       let rec = await axios.post(`${baseURL}finder`, body)
       console.log("Recommendations: ", rec.data)
       return rec.data
-    }catch{
-      console.log("ERROR")
-      return "Error getting user"
-    }
+  //  }catch{
+      //console.log("ERROR")
+      //return "Error getting user"
+    //}
   }
 }
 
