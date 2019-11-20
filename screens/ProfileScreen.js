@@ -48,7 +48,7 @@ export default class profilePage extends Component {
     this.setState(
       {
         name: _user.name,
-        desc: _user.des,
+        desc: _user.description,
         tag: JSON.stringify(_user.tags),
         username: _user.username
       }
@@ -68,7 +68,7 @@ export default class profilePage extends Component {
 
     let updatedUser = {
       name: this.state.name,
-      des: this.state.desc,
+      description: this.state.desc,
       tags: this.state.tags
     }
     this.setState({loading: true})
