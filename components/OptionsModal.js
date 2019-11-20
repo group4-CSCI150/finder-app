@@ -63,10 +63,10 @@ function ModalActions(props) {
     var i = -1;
     var actions = [];
     if (props.actions) {
-        props.actions.map( (action) => {
+        actions = props.actions.map( (action) => {
             i++;
             return (
-                <Option {...props} name={action.name} key={i} />
+                <Option {...props} name={action.name} action={action.action} key={i} />
             );
         });
     }
