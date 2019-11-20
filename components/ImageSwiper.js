@@ -14,16 +14,16 @@ import FadeInFromRightView from './FadeInFromRightView';
 class ImageSwiperContainer extends React.Component {
     constructor(props) {
         super(props);
-
+        this.sendMessage = props.sendMessage;                       // Only for PanResponder debug purposes, ignore
+        this.props = props;
         this.state = {
             currentImage: 0,
             left: new Animated.Value(0),
         };
 
-        this.sendMessage = props.sendMessage;
         this.numOfImages = props.imgUris.length;
         this.windowWidth = Dimensions.get('window').width;
-        this.setCurrentImage = this.setCurrentImage.bind(this);     // Note: need to bind class methods
+        this.setCurrentImage = this.setCurrentImage.bind(this);     // Note: need to bind class methods        
 
         /*
         Placeholder: instead of rendering Image components, render stock photos
@@ -92,12 +92,12 @@ class ImageSwiperContainer extends React.Component {
             }
         ).start()
     }
-    
+
+    //<View style={{position: 'absolute', width: this.windowWidth, height: 400, top: 0, left: 0}}>
+      //          </View>
     render() {
         return (
-            <View style={{overflow: 'visible', height: 500, width: this.windowWidth * this.numOfImages}} {...this._panResponder.panHandlers}>
-                <View style={{position: 'absolute', width: this.windowWidth, height: 400, top: 0, left: 0}}>
-                </View>
+            <View style={{overflow: 'visible', height: this.props.height, width: this.windowWidth * this.numOfImages}} {...this._panResponder.panHandlers}>
                 <Animated.View style={{overflow: 'visible', backgroundColor: 'red', flex: 1, flexDirection: 'row', 
                                        left: this.state.left}}>
                     {this.images}
@@ -262,6 +262,8 @@ class ImageSwiperNavBall extends React.Component {
 /*
 Props:
     imgUris - Array, required. Contains strings of image uri's to be displayed.
+
+    height - Integer, optional. Changes the height of the container (default 500)
 */
 export default function ImageSwiper(props) {
     // For PanResponder debug purposes
@@ -270,9 +272,14 @@ export default function ImageSwiper(props) {
         setMsg(msg + " " + gestureState.x0 + " " + gestureState.dx + " " + gestureState.vx);
     }
 
+    // In case imgUris was not passed as a prop
+    if (!props.imgUris) {
+        errImgUris = ['defaultUri'];
+    }
+
     return (
         <View>
-            <ImageSwiperContainer sendMessage={handleEvent} imgUris={props.imgUris}/>
+            <ImageSwiperContainer height={props.height ? props.height : 500} sendMessage={handleEvent} imgUris={props.imgUris ? props.imgUris : errImgUris}/>
             <View style={{position: 'absolute', bottom: 0, left: 20}}><Text>{msg}</Text></View>
         </View>
     );
