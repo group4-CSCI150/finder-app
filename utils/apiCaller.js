@@ -98,15 +98,15 @@ const api = {
     }
   },
 
-  getRecomendations: async () => {
+  getRecommendations: async () => {
     //try {
-      let _user = await getCurrentUser()
-      let _username = _user.username
-      let _tags = _user.tags
+      let _user = await getCurrentUser();
+      let _username = _user.username;
+      let _tags = _user.tags;
       let body = {
         user: _username,
         tags: _tags
-      }
+      };
       let rec = await axios.post(`${baseURL}finder`, body)
       console.log("Recommendations: ", rec.data)
       return rec.data

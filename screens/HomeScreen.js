@@ -193,7 +193,8 @@ export default function HomeScreen(props) {
       <Header back={true} actions={[{name:'Logout', action: logout }]}/>
       <ScrollView bounces={'false'}> 
         <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
-                              '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']} />
+                              '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']}
+                      height={400} />
         <ActivityFeed />
         
         <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>

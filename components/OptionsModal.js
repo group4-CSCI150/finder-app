@@ -61,13 +61,15 @@ function Option(props) {
 
 function ModalActions(props) {
     var i = -1;
-    var actions = props.actions.map( (action) => {
-        i++;
-        return (
-            <Option {...props} name={action.name} action={action.action} key={i} />
-        );
-    });
-
+    var actions = [];
+    if (props.actions) {
+        props.actions.map( (action) => {
+            i++;
+            return (
+                <Option {...props} name={action.name} key={i} />
+            );
+        });
+    }
     i++;
     actions.push(
         <Option {...props} isClose={true} key={i} />
@@ -88,13 +90,19 @@ function ModalActions(props) {
     );
 }
 
+
 /*
-props.actions is an array of objects of the form:
-{
-    name: 'Name of option',
-    action: function() { 'action taken on press' },
-    iconName: 'Ionicons-name' // Name to use for Ionicons component
-}
+Props:
+    actions - Array, required.
+        actions is an array of objects of the form:
+        {
+            name: 'Name of option',
+            action: function() { 'action taken on press' },
+            iconName: 'Ionicons-name' // Name to use for Ionicons component
+        }
+
+    modalVisible - Boolean, required. Tells whether or not the modal should be visible (true -> modal is visible)
+    setModalVisible - Function, required. Takes a single boolean argument that updates visibility of modal.
 */
 export default function OptionsModal(props) {
     return (
