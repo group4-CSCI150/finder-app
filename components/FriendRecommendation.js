@@ -9,6 +9,9 @@ import {
     ActivityIndicator,
     ScrollView,
     RefreshControl,
+    Animated,
+    Easing,
+    PanResponder,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import FadeInFromRightView from './FadeInFromRightView';
@@ -21,54 +24,112 @@ function wait(timeout) {
     });
 }
 async function loadFriendRecommendation() {
-    /*
-    Placeholder definition
-    */
-    await wait(1000);
-  
-    return {
-      id: 1,
-      name: 'Test User',
-      img1: 'image uri',
-      tags: ['coding']
-    };
+    var users = await api.getRecommendations();
+    return users;
 }
 
 
 var FRIEND_REC_WIDTH = Dimensions.get('window').width * 0.75;
 var FRIEND_REC_HEIGHT = FRIEND_REC_WIDTH * 1.5;
 
-function FriendRecommendationDisplay(props) {
-    if (!props.friendLoaded) {
-        return (
-            <View style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <ActivityIndicator size='large' />
-                            <Text>Loading</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
+
+class FriendRecommendationDisplay extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props = props;
+        
+        this.state = {
+            left: new Animated.Value(0)
+        };
+        
+        this.windowWidth = Dimensions.get('window').width;
+
+        this._panResponder = PanResponder.create({
+            // Ask to be the responder, don't capture nested responders:
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+            onMoveShouldSetPanResponder: (evt, gestureState) => false,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+
+            onPanResponderGrant: (evt, gestureState) => {
+                //props.sendMessage(evt, gestureState, "Gesture has started");
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                //props.sendMessage(evt, gestureState, "Gesture has moved");
+            },
+            onPanResponderTerminationRequest: (evt, gestureState) => true,
+            onPanResponderRelease: (evt, gestureState) => {
+                // props.sendMessage(evt, gestureState, "Gesture has been released");
+
+                // On swipe left
+                if (this.props.currentFriendIndex < this.props.friendData.length - 1 && gestureState.vx < -1) {
+                    this.props.setCurrentFriendIndex(this.props.currentFriendIndex + 1);
+                }
+                // On swipe right
+                else if (this.props.currentFriendIndex > 0 && gestureState.vx > 1) {
+                    this.props.setCurrentFriendIndex(this.props.currentFriendIndex - 1);
+                }
+            },
+        });
     }
-    else {
-        return (
-            <FadeInFromRightView style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}}>
-                        <View style={{width: '100%', height: '80%'}}>
-                            <Image source={require('../images/stock_photo.jpg')} style={{width: '100%', height: '100%'}} /> 
-                        </View>
-                        <View style={{width: '100%', height: '20%'}}>
-                            <Text>{props.friendData.name}</Text>
-                            <Text>{props.friendData.tags}</Text>
+
+    componentDidUpdate() {
+        // Change left positioning value depending on which image is currently being displayed.
+        var newLeftValue = this.props.currentFriendIndex * this.windowWidth * -1;
+        Animated.timing(
+            this.state.left,
+            {
+                toValue: newLeftValue,
+                duration: 250,
+                easing: Easing.out(Easing.cubic),
+            }
+        ).start()
+    }
+
+    render() {
+        if (!this.props.friendLoaded) {
+            return (
+                <View style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}}>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <ActivityIndicator size='large' />
+                                <Text>Loading</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </FadeInFromRightView>
-        );
+            );
+        }
+        else {
+            var i = -1;
+            var friends = this.props.friendData.map( (friend) => {
+                i++;
+                return (
+                    <FadeInFromRightView key={i} initialLeft={0} style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, 
+                                        borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}} {...this._panResponder.panHandlers}>
+                                <View style={{width: '100%', height: '80%'}}>
+                                    <Image source={require('../images/stock_photo.jpg')} style={{width: '100%', height: '100%'}} /> 
+                                </View>
+                                <View style={{width: '100%', height: '20%'}}>
+                                    <Text>{friend.name ? friend.name : 'Error: no name'}</Text>
+                                    <Text>{friend.tags ? 'Likes ' + friend.tags.join(', ') : 'Error: no tags'}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </FadeInFromRightView>
+                );
+            });
+            return (
+                <View style={{width: this.props.friendData.length * this.windowWidth, height: FRIEND_REC_HEIGHT + 20, overflow: 'visible'}}>
+                    <Animated.View style={{flex: 1, flexDirection: 'row', left: this.state.left}}>
+                        {friends}
+                    </Animated.View>
+                </View>
+            );
+        }
     }
 }
 
@@ -128,17 +189,25 @@ function MyButton(props) {
 function FriendRecommendation(props) {
     [friendLoaded, setFriendLoaded] = useState(false);
     [shouldRefresh, setShouldRefresh] = useState(true);
-    [friendData, setFriendData] = useState({});
+    [friendData, setFriendData] = useState([]);
+    [currentFriendIndex, setCurrentFriendIndex] = useState(0);
     [refreshing, setRefreshing] = useState(false);
 
     if (shouldRefresh) {
         loadFriendRecommendation().then( (data) => {
-                setFriendData(data);
+                setFriendData(data.users);
                 setShouldRefresh(false);
                 setFriendLoaded(true);
                 setRefreshing(false);
             }
-        )
+        ).catch( (e) => {
+            console.log('Could not load recommendation');
+            console.log(e);
+            setFriendData([{name: 'Error'}, {name: 'Could not load recommendations'}]);
+            setFriendLoaded(true);
+            setShouldRefresh(false);
+            setRefreshing(false);
+        });
     }
 
     function onRefresh() {
@@ -160,16 +229,21 @@ function FriendRecommendation(props) {
         },
         {
             iconName: Platform.OS === 'ios' ? 'ios-eye' : 'md-eye',
-            actionName: 'View Profile'
+            actionName: 'View Profile',
+            action: function() {
+                props.navigation.navigate('GuestProfile', { user: friendData[currentFriendIndex] });
+            }
         }
     ];
 
     return (
-        <FadeInFromRightView>
+        <View>
             <ScrollView refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
             }>
-                <FriendRecommendationDisplay friendLoaded={friendLoaded} friendData={friendData} />
+                <FriendRecommendationDisplay friendLoaded={friendLoaded} friendData={friendData} 
+                                             currentFriendIndex={currentFriendIndex} setCurrentFriendIndex={setCurrentFriendIndex}
+                />
                 <FriendRecommendationButtons actions={actions}/>
                 <View style={{width: '100%', height: 200}}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -177,7 +251,7 @@ function FriendRecommendation(props) {
                     </View>
                 </View>
             </ScrollView>
-        </FadeInFromRightView>
+        </View>
     );
 }
 

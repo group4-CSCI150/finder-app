@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
+import GuestProfileScreen from '../screens/GuestProfileScreen';
 
 const config = {
   headerMode: 'none',
@@ -41,6 +42,7 @@ const SearchStack = createStackNavigator(
   {
     Search: SearchScreen,
     AdvancedSearch: AdvancedSearchScreen,
+    GuestProfile: GuestProfileScreen,
   },
   config
 );

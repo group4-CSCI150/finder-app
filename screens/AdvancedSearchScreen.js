@@ -24,7 +24,7 @@ export default function AdvancedSearchScreen(props) {
                 <View>
                     
                 </View>
-                <Text>Test</Text>
+                <Text>TODO: Implement advanced search</Text>
             </View>
         </SafeAreaView>
     );

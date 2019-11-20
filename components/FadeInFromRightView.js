@@ -5,9 +5,10 @@ import {
     Easing
 } from 'react-native';
 
+
 export default function FadeInFromRightView(props) {
-    const [opacity] = useState(new Animated.Value(0))  // Initial value for opacity: 0
-    const [left] = useState(new Animated.Value(50))
+    const [opacity] = useState(new Animated.Value(0));
+    const [left] = useState(new Animated.Value(50));
   
     useEffect(() => {
       Animated.parallel([
@@ -31,10 +32,10 @@ export default function FadeInFromRightView(props) {
     }, [])
   
     return (
-      <Animated.View                 // Special animatable View
+      <Animated.View
         style={{
           ...props.style,
-          opacity: opacity,         // Bind opacity to animated value
+          opacity: opacity,
           left: left,
         }}
       >
