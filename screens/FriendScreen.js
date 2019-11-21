@@ -21,39 +21,15 @@ import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 import validator from 'validator';
-
+import Header from '../components/Header';
 
 export default class FriendScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
 
-    };
-  }
-  getToken() {
-    return token.getToken();
-  }
-  getUserById() {
-    return api.getUserById();
-  }
-
-  async getFriend() {
-    let pass = await this.getToken();
-    if (pass) {
-      console.log(pass)
-      let user = await this.getUserById();
-      this.setState({displayFriend: user });
-    }
-  }
   render() {
-    this.getFriend();
-    let listFriend 
-    if (this.state.displayFriend) {
-      listFriend = <Text> {this.state.displayFriend} </Text>;
-    }
     return (
     <ScrollView style={style.container}>
-    <View style = {style.list}>{listFriend}</View>
+    <Header style={style.header} title="Friends"/>
+    <Text style={style.containerTextInput}>{api.getFriends()}</Text>
     </ScrollView>
     );
   }

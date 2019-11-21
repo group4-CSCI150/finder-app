@@ -5,14 +5,12 @@ import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-<<<<<<< HEAD
 import FriendScreen from '../screens/FriendScreen';
-=======
 import SearchScreen from '../screens/SearchScreen';
 import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
 import GuestProfileScreen from '../screens/GuestProfileScreen';
 
->>>>>>> 6d31b0bda4334f3f8605570e7242e96ddce4d9fc
+
 const config = {
   headerMode: 'none',
   headerVisible: false,
