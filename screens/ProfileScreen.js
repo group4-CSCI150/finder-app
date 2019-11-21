@@ -12,6 +12,8 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator
 } from 'react-native';
+import Header from '../components/Header';
+
 
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
@@ -36,22 +38,21 @@ export default class profilePage extends Component {
     };
   }
 
-  //TODO: Instead of getting user data from token, use the token to get username. 
-  //      Then, call API using username to get updated user data 
-  getToken(){
-    return token.getToken();
+  //TODO: Instead of getting user data from token, use the token to get username.
+  //      Then, call API using username to get updated user data
+  getCurrUser() {
+    return api.getSelf()
   }
 
   async componentDidMount() {
-    let tok = await this.getToken();
-    tok = JSON.parse(tok).user
+    let _user = await this.getCurrUser();
 
     this.setState(
       {
-        name: tok.name,
-        desc: tok.des,
-        tag: JSON.stringify(tok.tags),
-        username: tok.username
+        name: _user.name,
+        desc: _user.description,
+        tag: JSON.stringify(_user.tags),
+        username: _user.username
       }
     )
 
@@ -65,16 +66,16 @@ export default class profilePage extends Component {
   }
 
   async handleSave() {     // if isEdit initially true -> confirm changes and switch to viewing
-    
+
 
     let updatedUser = {
       name: this.state.name,
-      des: this.state.desc,
+      description: this.state.desc,
       tags: this.state.tags
     }
-    this.setState({loading: true})
+    this.setState({ loading: true })
     let update = await api.updateUser(this.state.username, updatedUser)
-    this.setState({loading: false})
+    this.setState({ loading: false })
 
     this.setState({ isEdit: false });
     this.setState({ buttonName: "Edit Profile" });
@@ -84,16 +85,22 @@ export default class profilePage extends Component {
 
   // display view profile as default - on button press, be able to edit the text fields
   render() {
+    const { navigate } = this.props.navigation;
+
+    logout = async () => {
+      await token.removeToken()
+      navigate('LoginNav')
+    }
+
     let loading;
-    if(this.state.loading){
+    if (this.state.loading) {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
 
     return (
       <KeyboardAvoidingView style={style.container} behavior="padding">
+        <Header title="Profile" actions={[{name:'Logout', action: logout }]}/>
         <View style={style.header}>
-          <Text style={style.headerFont}>My Profile</Text>
-
           <View style={style.profilepicWrap}>
             <Image source={require('../images/bulldog.png')} style={style.profilepic} />
           </View>

@@ -17,6 +17,8 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel
 } from 'react-native-simple-radio-button';
+import Header from '../components/Header';
+
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import validator from 'validator';
@@ -44,56 +46,54 @@ export default class RegisterScreen extends Component {
     var formatDate = this.state.DOB.split('-');
     try {
       if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.DOB) || validator.isEmpty(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
-    	this.setState({ message: "Fields cannot be empty" });
-    	return;
+        this.setState({ message: "Fields cannot be empty" });
+        return;
       }
       else if (emailDomain[1] != "mail.fresnostate.edu") {
-    	this.setState({message:"Not a Fresno State Email"})
-    	return
+        this.setState({ message: "Not a Fresno State Email" })
+        return
       }
-      else if (isNaN(formatDate[0]) || formatDate[0].length != 2 || isNaN(formatDate[1]) || formatDate[1].length != 2  || isNaN(formatDate[2]) || formatDate[2].length != 4 ) {
-    	  this.setState({message: "Not a valid date"});
-    	  return;
+      else if (isNaN(formatDate[0]) || formatDate[0].length != 2 || isNaN(formatDate[1]) || formatDate[1].length != 2 || isNaN(formatDate[2]) || formatDate[2].length != 4) {
+        this.setState({ message: "Not a valid date" });
+        return;
       }
       else if (this.state.password != this.state.confirmPW) {
-    	this.setState({message:"Password do not match"})
-    	return;
+        this.setState({ message: "Password do not match" })
+        return;
       }
       else if (this.state.check == 0) {
-    	this.setState({message:"Please check Term of Service"})
-    	return;
+        this.setState({ message: "Please check Term of Service" })
+        return;
       }
-    this.setState({editable: false})
-    let user = await api.createUser({ username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password });
-    this.setState({editable: true})
-    this.props.navigation.navigate("Login")
-   }
+      this.setState({ editable: false })
+      let user = await api.createUser({ username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password });
+      this.setState({ editable: true })
+      this.props.navigation.navigate("Login")
+    }
     catch{
-      this.setState({editable: true})
+      this.setState({ editable: true })
       this.setState({ message: "Something went wrong. Please reload and try again." });
-     }
+    }
   }
   render() {
+    const { navigate } = this.props.navigation;
+
+    logout = async () => {
+      await token.removeToken()
+      navigate('LoginNav')
+    }
+
     let error;
     if (this.state.message) {
       error = <Text style={{ textAlign: "center", backgroundColor: "red" }}>{this.state.message}</Text>
     }
     let loading;
-    if(!this.state.editable){
+    if (!this.state.editable) {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
     return (
       <ScrollView style={style.container}>
-        <View style={style.containerHeader}>
-          <Text style={style.header}>
-            <Image
-              style={style.image}
-              source={require('../images/bulldog.png')}
-              resizeMode="contain"
-            />
-            Register Page
-				</Text>
-        </View>
+        <Header title="Register" back={true}/>
         <View>{error}</View>
         <View style={style.containerTextInput}>
           <Text style={{ marginTop: 10 }}>Username:</Text>

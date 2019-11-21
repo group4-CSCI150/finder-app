@@ -5,7 +5,14 @@ import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+<<<<<<< HEAD
 import FriendScreen from '../screens/FriendScreen';
+=======
+import SearchScreen from '../screens/SearchScreen';
+import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
+import GuestProfileScreen from '../screens/GuestProfileScreen';
+
+>>>>>>> 6d31b0bda4334f3f8605570e7242e96ddce4d9fc
 const config = {
   headerMode: 'none',
   headerVisible: false,
@@ -36,6 +43,31 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+const SearchStack = createStackNavigator(
+  {
+    Search: SearchScreen,
+    AdvancedSearch: AdvancedSearchScreen,
+    GuestProfile: GuestProfileScreen,
+  },
+  config
+);
+
+SearchStack.navigationOptions = {
+  tabBarLabel: 'Search',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-search`
+          : 'md-search'
+      }
+    />
+  ),
+};
+
+SearchStack.path = '';
+
 const ProfileStack = createStackNavigator(
   {
     Profile: ProfileScreen,
@@ -54,6 +86,7 @@ ProfileStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
+  SearchStack,
   ProfileStack,
 });
 

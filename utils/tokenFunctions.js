@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native';
+const Base64 = require('js-base64').Base64
 const token = {
 
     storeToken: async (token) => {
