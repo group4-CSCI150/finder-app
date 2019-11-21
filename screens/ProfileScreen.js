@@ -19,7 +19,8 @@ import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 
-var listTags= [ "art", "coding", "sports", "reading","gaming"];
+var listTags= [ "art", "reading", "writing", "dance", "cooking", "coding", "sports","gaming"];
+var selectedTags = [];
 
 export default class profilePage extends Component {
   constructor(props) {
@@ -30,8 +31,7 @@ export default class profilePage extends Component {
     this.state = {
       name: "Name",
       desc: "Bio",
-      tag_array: [],
-      tag: "",
+      tag: "Interests",
       username: "",
       isEdit: false,  // editablity of text input - true when edit
       isMulti: true,  // make able to do multiple lines when input text
@@ -40,7 +40,6 @@ export default class profilePage extends Component {
       changeButton: false, // change button style depending on if view or edit screen
       loading: false,
 
-  //    listTags: [ "art", "coding", "sports", "reading","gaming"],
     };
   }
 
@@ -53,6 +52,7 @@ export default class profilePage extends Component {
   async componentDidMount() {
     let _user = await this.getCurrUser();
 
+    selectedTags = _user.tags;
     this.setState(
       {
         name: _user.name,
@@ -72,8 +72,6 @@ export default class profilePage extends Component {
   }
 
   async handleSave() {     // if isEdit initially true -> confirm changes and switch to viewing
-
-
     let updatedUser = {
       name: this.state.name,
       description: this.state.desc,
@@ -91,9 +89,19 @@ export default class profilePage extends Component {
   }
 
   onSelect(value) {
-    let temp = this.state.tag;
-    temp = temp.slice(0,temp.length-1).concat(",\"", value,"\"]");
-    this.setState({tag: temp});
+  let temp = this.state.tag;
+// check if selected tag has already been selected
+console.log(selectedTags);
+  let doesExist = selectedTags.includes(value); 
+    if(doesExist){
+      this.setState({tag: temp}); // no change
+    }
+
+    else{    // update new tag
+      temp = temp.slice(0,temp.length-1).concat(",\"", value,"\"]");
+      this.setState({tag: temp});
+      selectedTags.push(value);
+    }
   }
 
   // display view profile as default - on button press, be able to edit the text fields
