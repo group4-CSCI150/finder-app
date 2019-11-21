@@ -60,7 +60,7 @@ const api = {
       console.log("POST: ", user.data)
       return user.data
     }catch{
-      return "Error getting user"
+      return "Error creating user"
     }
   },
 
@@ -71,7 +71,7 @@ const api = {
       console.log("PUT: ", user.data)
       return user.data
     }catch{
-      return "Error getting user"
+      return "Error updating user"
     }
   },
 
@@ -82,7 +82,7 @@ const api = {
       console.log("LOGIN: ", user.data)
       return user.data
     }catch{
-      return "Error getting user"
+      throw Error("Error login user")
     }
   },
 
@@ -94,7 +94,7 @@ const api = {
       console.log("GET Friends: ", friends.data)
       return friends.data
     }catch{
-      return "Error getting user"
+      return "Error getting friends"
     }
   },
 
