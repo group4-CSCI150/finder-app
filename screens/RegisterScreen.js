@@ -32,6 +32,7 @@ export default class RegisterScreen extends Component {
     super(props);
     this.state = {
       username: "",
+      name: "",
       DOB: "",
       email: "",
       password: "",
@@ -45,7 +46,7 @@ export default class RegisterScreen extends Component {
     var emailDomain = this.state.email.split('@');
     var formatDate = this.state.DOB.split('-');
     try {
-      if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.DOB) || validator.isEmpty(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
+      if (validator.isEmpty(this.state.username) || validator.isEmpty(this.state.name) || validator.isEmpty(this.state.DOB) || validator.isEmpty(this.state.email) || validator.isEmpty(this.state.password) || validator.isEmpty(this.state.confirmPW)) {
         this.setState({ message: "Fields cannot be empty" });
         return;
       }
@@ -66,7 +67,7 @@ export default class RegisterScreen extends Component {
         return;
       }
       this.setState({ editable: false })
-      let user = await api.createUser({ username: this.state.username, DOB: this.state.DOB, email: this.state.email, password: this.state.password });
+      let user = await api.createUser({ username: this.state.username, DOB: this.state.DOB, name: this.state.name, email: this.state.email, password: this.state.password });
       this.setState({ editable: true })
       this.props.navigation.navigate("Login")
     }
@@ -112,6 +113,15 @@ export default class RegisterScreen extends Component {
             placeholder="Fresno State Email"
             onChangeText={(email) => this.setState({ email: email })}
             value={this.state.email}
+            underlineColorAndroid={'transparent'}
+          />
+          <Text>Name:</Text>
+          <TextInput
+            editable={this.state.editable}
+            style={style.textInput}
+            placeholder="John"
+            onChangeText={(name) => this.setState({ name })}
+            value={this.state.name}
             underlineColorAndroid={'transparent'}
           />
           <Text>Date of Birth:</Text>

@@ -13,10 +13,13 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Header from '../components/Header';
+import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
 
 
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
+
+var listTags= [ "art", "coding", "sports", "reading","gaming"];
 
 export default class profilePage extends Component {
   constructor(props) {
@@ -27,14 +30,17 @@ export default class profilePage extends Component {
     this.state = {
       name: "Name",
       desc: "Bio",
-      tag: "Interest",
+      tag_array: [],
+      tag: "",
       username: "",
       isEdit: false,  // editablity of text input - true when edit
       isMulti: true,  // make able to do multiple lines when input text
       buttonName: "Edit Profile", // default - on button press, title will change to confirm changes
       pressStatus: false, // for changing color of button when edit
       changeButton: false, // change button style depending on if view or edit screen
-      loading: false
+      loading: false,
+
+  //    listTags: [ "art", "coding", "sports", "reading","gaming"],
     };
   }
 
@@ -71,8 +77,9 @@ export default class profilePage extends Component {
     let updatedUser = {
       name: this.state.name,
       description: this.state.desc,
-      tags: this.state.tags
+      tags: this.state.tags,
     }
+    
     this.setState({ loading: true })
     let update = await api.updateUser(this.state.username, updatedUser)
     this.setState({ loading: false })
@@ -81,6 +88,12 @@ export default class profilePage extends Component {
     this.setState({ buttonName: "Edit Profile" });
     this.setState({ pressStatus: false });  // change to view only style
     this.setState({ changeButton: false }); // edit button style
+  }
+
+  onSelect(value) {
+    let temp = this.state.tag;
+    temp = temp.slice(0,temp.length-1).concat(",\"", value,"\"]");
+    this.setState({tag: temp});
   }
 
   // display view profile as default - on button press, be able to edit the text fields
@@ -111,17 +124,38 @@ export default class profilePage extends Component {
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(name) => this.setState({ name })}>
             {this.state.name}</TextInput>
+
           <TextInput editable={this.state.isEdit}
             multiline={this.state.isMulti}
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(desc) => this.setState({ desc })}>
             {this.state.desc}</TextInput>
+<<<<<<< HEAD
           <TextInput editable={this.state.isEdit}
             multiline={this.state.isMulti}
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(tag) => this.setState({ tag })}>
             {this.state.tag}</TextInput>
-            <Text style={style.btnText} onPress={() => { this.props.navigation.navigate("Friend") }}>Friends</Text>
+            
+=======
+
+          <Select 
+            onSelect = {this.onSelect.bind(this)}
+            defaultText = {this.state.tag} 
+            textStyle = {this.state.isEdit ? style.tagFont_edit : style.tagFont_prof}
+            style = {this.state.pressStatus ? style.tagInput_style : style.default_tag}
+            transparent = {true}
+            optionListStyle = {{backgroundColor : "white"}}
+          >
+          {listTags.map(listTags => (
+          <Option 
+            key={listTags} value={listTags}>
+            {listTags}
+          </Option>
+          ))}
+          </Select>
+          
+>>>>>>> df97105cd2c0638cc0fd47216d4d7f8c184f7d96
           <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
             onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
             <Text style={style.buttonFont}>{this.state.buttonName}</Text>
@@ -191,13 +225,35 @@ const style = StyleSheet.create({
   },
 
   textInput_style: {
-    height: 40,
+    height: 45,
     width: 250,
     margin: 5,
     padding: 5,
     borderColor: 'black',
     borderWidth: 1,
     fontSize: 20,
+  },
+
+  tagInput_style: {
+    height: 45,
+    width: 250,
+    margin: 5,
+    padding: 5,
+    borderColor: 'black',
+    alignSelf: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+
+  default_tag: {
+    height: 40,
+    width: 250,
+    margin: 5,
+    padding: 5,
+    borderColor: 'white',
+    alignSelf: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
 
   // Text styles
@@ -223,11 +279,29 @@ const style = StyleSheet.create({
     color: '#fff',
     fontSize: 20
   },
+<<<<<<< HEAD
   btnText: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 20,
     marginLeft: 10,
+=======
+
+  tagFont_prof: {
+    textAlign: "center",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: 'black',
+    fontSize: 22,
+  },
+
+  tagFont_edit: {
+    textAlign: "center",
+    justifyContent: 'center',
+    alignSelf: 'center',
+    color: 'black',
+    fontSize: 20,
+>>>>>>> df97105cd2c0638cc0fd47216d4d7f8c184f7d96
   },
 });
 
