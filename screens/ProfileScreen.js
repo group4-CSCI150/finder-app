@@ -130,14 +130,12 @@ export default class profilePage extends Component {
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(desc) => this.setState({ desc })}>
             {this.state.desc}</TextInput>
-<<<<<<< HEAD
+
           <TextInput editable={this.state.isEdit}
             multiline={this.state.isMulti}
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(tag) => this.setState({ tag })}>
             {this.state.tag}</TextInput>
-            
-=======
 
           <Select 
             onSelect = {this.onSelect.bind(this)}
@@ -154,8 +152,6 @@ export default class profilePage extends Component {
           </Option>
           ))}
           </Select>
-          
->>>>>>> df97105cd2c0638cc0fd47216d4d7f8c184f7d96
           <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
             onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
             <Text style={style.buttonFont}>{this.state.buttonName}</Text>
@@ -279,14 +275,6 @@ const style = StyleSheet.create({
     color: '#fff',
     fontSize: 20
   },
-<<<<<<< HEAD
-  btnText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginLeft: 10,
-=======
-
   tagFont_prof: {
     textAlign: "center",
     justifyContent: 'center',
@@ -301,7 +289,6 @@ const style = StyleSheet.create({
     alignSelf: 'center',
     color: 'black',
     fontSize: 20,
->>>>>>> df97105cd2c0638cc0fd47216d4d7f8c184f7d96
   },
 });
 
