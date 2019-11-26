@@ -39,11 +39,12 @@ export default class FriendScreen extends Component {
   //   return api.getFriends()
   // }
   fetchData = async () => {
-    const user = await fetch("https://us-central1-test150project.cloudfunctions.net/api/user");
-    const json = await user.json();
-    this.setState({data: json.users});
-    // let user = await this.friendList();
-    // this.setState({data: user.users})
+    const user = await api.getFriends()
+    this.setState({data: user.users});
+
+    let newArray = this.state.data.map((friend) => {
+      // loop through friends array and create a new array with the names for the FlatList
+    })
   };
   
  render() {
