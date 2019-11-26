@@ -72,9 +72,12 @@ export default class LoginScreen extends Component {
       await token.storeToken(Base64.encode(JSON.stringify(user)))
       this.props.navigation.navigate("MainNav")
     }
-    catch{
+    catch(err){
       this.setState({ editable: true })
-      this.setState({ message: "Invalid credentials" })
+      if(err)
+        this.setState({message: err.message})
+      else 
+        this.setState({ message: "Invalid credentials" })
     }
   }
 

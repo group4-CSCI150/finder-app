@@ -16,7 +16,7 @@ async function getCurrentUser() {
     let user = await axios.get(`${baseURL}byID/${username}`)
     console.log(user.data)
     return user.data.user
-  }catch{
+  } catch (err) {
     return "Error getting user"
   }
 }
@@ -26,9 +26,8 @@ const api = {
   getSelf: async () => {
     try {
       return getCurrentUser()
-
-    }catch{
-      return "Error getting user"
+    } catch (err) {
+      throw Error("Error getting user")
     }
   },
   // Returns a single user from the DB
@@ -37,8 +36,8 @@ const api = {
       let user = await axios.get(`${baseURL}byID/${username}`)
       console.log("GET: ", user.data)
       return user.data
-    }catch{
-      return "Error getting user"
+    } catch (err) {
+      throw Error("Error getting user")
     }
   },
 
@@ -48,8 +47,8 @@ const api = {
       let user = await axios.get(`${baseURL}`)
       console.log("GET: ", user.data)
       return user.data
-    }catch{
-      return "Error getting user"
+    } catch (err) {
+      throw Error("Error getting user")
     }
   },
 
@@ -59,8 +58,8 @@ const api = {
       let user = await axios.post(`${baseURL}`, body)
       console.log("POST: ", user.data)
       return user.data
-    }catch{
-      return "Error creating user"
+    } catch (err) {
+      throw Error("Error creating user")
     }
   },
 
@@ -70,8 +69,8 @@ const api = {
       let user = await axios.put(`${baseURL}byID/${username}`, body)
       console.log("PUT: ", user.data)
       return user.data
-    }catch{
-      return "Error updating user"
+    } catch (err) {
+      throw Error("Error updating user")
     }
   },
 
@@ -81,8 +80,12 @@ const api = {
       let user = await axios.post(`${baseURL}login`, body)
       console.log("LOGIN: ", user.data)
       return user.data
-    }catch{
-      throw Error("Error login user")
+    } catch (err) {
+      if (err.response.status == 404) {
+        throw Error("Wrong username or password")
+      }else{
+        throw Error("Something went worng")
+      }
     }
   },
 
@@ -93,13 +96,13 @@ const api = {
       let friends = await axios.get(`${baseURL}byIDList/${username}`)
       console.log("GET Friends: ", friends.data)
       return friends.data
-    }catch{
-      return "Error getting friends"
+    } catch (err) {
+      throw Error("Error getting friends")
     }
   },
 
   getRecommendations: async () => {
-    //try {
+    try {
       let _user = await getCurrentUser();
       let _username = _user.username;
       let _tags = _user.tags;
@@ -110,10 +113,9 @@ const api = {
       let rec = await axios.post(`${baseURL}finder`, body)
       console.log("Recommendations: ", rec.data)
       return rec.data
-  //  }catch{
-      //console.log("ERROR")
-      //return "Error getting user"
-    //}
+    } catch (err) {
+      throw Error("Error getting user")
+    }
   }
 }
 
