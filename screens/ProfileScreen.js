@@ -109,7 +109,7 @@ export default class profilePage extends Component {
     if (this.state.loading) {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
-
+    var i = -1;
     return (
       <KeyboardAvoidingView style={style.container} behavior="padding">
         <Header title="Profile" actions={[{name:'Logout', action: logout }]}/>
@@ -136,7 +136,7 @@ export default class profilePage extends Component {
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(tag) => this.setState({ tag })}>
             {this.state.tag}</TextInput>
-
+            <Text style={style.btnText} onPress={() => { this.props.navigation.navigate("Friend") }}>Friends</Text>
           <Select 
             onSelect = {this.onSelect.bind(this)}
             defaultText = {this.state.tag} 

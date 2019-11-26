@@ -10,7 +10,8 @@ import {
   TextInput,
   ScrollView,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import RadioForm, {
   RadioButton,
@@ -24,12 +25,53 @@ import validator from 'validator';
 import Header from '../components/Header';
 
 export default class FriendScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+    };
+  }
 
-  render() {
+  componentWillMount() {
+    this.fetchData();
+  }
+  // friendList() {
+  //   return api.getFriends()
+  // }
+  fetchData = async () => {
+    const user = await fetch("https://us-central1-test150project.cloudfunctions.net/api/user");
+    const json = await user.json();
+    this.setState({data: json.users});
+    // let user = await this.friendList();
+    // this.setState({data: user.users})
+  };
+  
+ render() {
+  logout = async () => {
+    await token.removeToken()
+    navigate('LoginNav')
+  }
+    separate = () => {
+      <View style ={{
+        height: 1,
+      }}
+      />
+    }
+
     return (
-    <ScrollView style={style.container}>
-    <Header style={style.header} title="Friends"/>
-    <Text style={style.containerTextInput}>{api.getFriends()}</Text>
+    <ScrollView style={style.container}>    
+    <Header title="Friends"/>
+    <View style={style.header}></View>
+    <View style={style.friendDisplay}>
+    <FlatList 
+      data = {this.state.data}
+      keyExtractor = {(item, index) => 'key'+index}
+      renderItem = {({ item }) =>
+      <Text> {item.user.friends}</Text>
+      }
+      ItemSeparatorComponent={this.separate}
+    />
+    </View>
     </ScrollView>
     );
   }
@@ -39,18 +81,17 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
   },
-  containerTextInput: {
+  friendDisplay: {
     borderRadius: 4,
     borderWidth: 0.5,
     marginHorizontal: 16,
-    paddingLeft: 60,
+    paddingLeft: 100,
     paddingRight: 60,
   },
   header: {
     textAlign: "center",
     fontSize: 24,
     color: '#FFFFFF',
-    borderWidth: 0.5,
     borderColor: '#d6d7da',
     backgroundColor: '#214786',
     paddingTop: 5,
@@ -60,43 +101,4 @@ const style = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#FFFFFF',
   },
-  button: {
-    width: 50,
-    padding: 20,
-    borderRadius: 4,
-    backgroundColor: 'green',
-    marginTop: 20,
-    left: 20,
-    marginBottom: 10,
-    borderRadius: 60,
-  },
-  btnText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginLeft: 15
-  },
-
-  textInput: {
-    alignSelf: 'stretch',
-    height: 40,
-    marginBottom: 15,
-    color: '#000',
-    borderBottomWidth: 1,
-    backgroundColor: '#f8f8f8',
-  },
-  image: {
-    position: "relative",
-    height: 40,
-    width: 40,
-    marginLeft: 15,
-    marginTop: 15,
-  },
-  list: {
-    padding: 50,
-    height: 120,
-    width: 120,
-    marginTop: 15,
-    marginLeft: 15,
-  }
-
 });
