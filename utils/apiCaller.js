@@ -3,6 +3,7 @@ import token from "./tokenFunctions"
 const axios = require('axios')
 
 const baseURL = 'https://us-central1-test150project.cloudfunctions.net/api/user/'
+const chatURL = 'https://us-central1-test150project.cloudfunctions.net/api/chat/'
 /*
 These Functions are used to make database calls.
 Some of them receive a body as input or an username.
@@ -114,6 +115,29 @@ const api = {
       //console.log("ERROR")
       //return "Error getting user"
     //}
+  },
+
+  sendMessage: async (body) => {
+    body.requestType = 'sendMessage';
+    let response = await axios.post(`${chatURL}`, body);
+    response = response.data;
+    console.log(response);
+    return response;
+  },
+
+  getMessages: async (body) => {
+    body.requestType = 'getMessages';
+    let response = await axios.post(`${chatURL}`, body);
+    response = response.data;
+    if (response.message === 'Success') {
+      console.log('Retrieved', response.numOfNewMessages, 'new messages.');
+      console.log('Messages: ', response.newMessages);
+    }
+    else {
+      console.log('Error getting message');
+      console.log(response.message);
+    }
+    return response.newMessages;
   }
 }
 
