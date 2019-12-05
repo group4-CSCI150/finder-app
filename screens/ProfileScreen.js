@@ -52,12 +52,11 @@ export default class profilePage extends Component {
   async componentDidMount() {
     let _user = await this.getCurrUser();
 
-    selectedTags = _user.tags;
     this.setState(
       {
         name: _user.name,
         desc: _user.description,
-        tag: JSON.stringify(_user.tags),
+        tag: _user.tags,
         username: _user.username
       }
     )
@@ -75,11 +74,11 @@ export default class profilePage extends Component {
     let updatedUser = {
       name: this.state.name,
       description: this.state.desc,
-      tags: this.state.tags,
+      tags: this.state.tag,
     }
     
     this.setState({ loading: true })
-    let update = await api.updateUser(this.state.username, updatedUser)
+    await api.updateUser(this.state.username, updatedUser)
     this.setState({ loading: false })
 
     this.setState({ isEdit: false });
@@ -89,18 +88,19 @@ export default class profilePage extends Component {
   }
 
   onSelect(value) {
-  let temp = this.state.tag;
-// check if selected tag has already been selected
-console.log(selectedTags);
-  let doesExist = selectedTags.includes(value); 
+    let temp = this.state.tag;
+    console.log(this.state.tag)
+    // check if selected tag has already been selected
+    let doesExist = temp.includes(value); 
     if(doesExist){
+      console.log("Before", temp)
+      temp.splice(temp.indexOf(value),1)
+      console.log("AFTER", temp)
       this.setState({tag: temp}); // no change
     }
-
     else{    // update new tag
-      temp = temp.slice(0,temp.length-1).concat(",\"", value,"\"]");
+      temp.push(value);
       this.setState({tag: temp});
-      selectedTags.push(value);
     }
   }
 
@@ -119,7 +119,7 @@ console.log(selectedTags);
     }
     var i = -1;
     return (
-      <KeyboardAvoidingView style={style.container} behavior="padding">
+      <ScrollView style={style.container} behavior="padding">
         <Header title="Profile" actions={[{name:'Logout', action: logout }]}/>
         <View style={style.header}>
           <View style={style.profilepicWrap}>
@@ -138,16 +138,9 @@ console.log(selectedTags);
             style={this.state.pressStatus ? style.textInput_style : style.default_profile}
             onChangeText={(desc) => this.setState({ desc })}>
             {this.state.desc}</TextInput>
-
-          <TextInput editable={this.state.isEdit}
-            multiline={this.state.isMulti}
-            style={this.state.pressStatus ? style.textInput_style : style.default_profile}
-            onChangeText={(tag) => this.setState({ tag })}>
-            {this.state.tag}</TextInput>
-            <Text style={style.btnText} onPress={() => { this.props.navigation.navigate("Friend") }}>Friends</Text>
           <Select 
             onSelect = {this.onSelect.bind(this)}
-            defaultText = {this.state.tag} 
+            defaultText = {this.state.tag.toString()} 
             textStyle = {this.state.isEdit ? style.tagFont_edit : style.tagFont_prof}
             style = {this.state.pressStatus ? style.tagInput_style : style.default_tag}
             transparent = {true}
@@ -160,13 +153,17 @@ console.log(selectedTags);
           </Option>
           ))}
           </Select>
+          <TouchableOpacity style={style.buttonConfirmContainer}
+            onPress={() => { this.props.navigation.navigate("Friend") }}>
+            <Text style={style.buttonFont}>Friend List</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
             onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
             <Text style={style.buttonFont}>{this.state.buttonName}</Text>
           </TouchableOpacity>
           {loading}
         </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
 
     );
   }
@@ -188,7 +185,7 @@ const style = StyleSheet.create({
     backgroundColor: '#dc143c',
     alignSelf: "center",
     justifyContent: "center",
-    marginTop: 70,
+    marginTop: 30,
     width: '60%'
   },
 
