@@ -20,7 +20,6 @@ const config = {
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Friend: FriendScreen,
   },
   config
 );
@@ -69,6 +68,7 @@ SearchStack.path = '';
 const ProfileStack = createStackNavigator(
   {
     Profile: ProfileScreen,
+    Friend: FriendScreen,
   },
   config
 );
