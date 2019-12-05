@@ -5,11 +5,9 @@ import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import FriendScreen from '../screens/FriendScreen';
 import SearchScreen from '../screens/SearchScreen';
 import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
 import GuestProfileScreen from '../screens/GuestProfileScreen';
-
 
 const config = {
   headerMode: 'none',
@@ -20,7 +18,6 @@ const config = {
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Friend: FriendScreen,
   },
   config
 );
