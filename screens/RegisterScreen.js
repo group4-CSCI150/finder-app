@@ -204,7 +204,7 @@ const style = StyleSheet.create({
     borderRadius: 60,
   },
   btnText: {
-    color: '#fff',
+    color: 'white',
     fontWeight: 'bold',
     marginLeft: 15
   },

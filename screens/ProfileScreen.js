@@ -109,7 +109,7 @@ export default class profilePage extends Component {
     if (this.state.loading) {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
-
+    var i = -1;
     return (
       <KeyboardAvoidingView style={style.container} behavior="padding">
         <Header title="Profile" actions={[{name:'Logout', action: logout }]}/>
@@ -131,6 +131,12 @@ export default class profilePage extends Component {
             onChangeText={(desc) => this.setState({ desc })}>
             {this.state.desc}</TextInput>
 
+          <TextInput editable={this.state.isEdit}
+            multiline={this.state.isMulti}
+            style={this.state.pressStatus ? style.textInput_style : style.default_profile}
+            onChangeText={(tag) => this.setState({ tag })}>
+            {this.state.tag}</TextInput>
+            <Text style={style.btnText} onPress={() => { this.props.navigation.navigate("Friend") }}>Friends</Text>
           <Select 
             onSelect = {this.onSelect.bind(this)}
             defaultText = {this.state.tag} 
@@ -146,7 +152,6 @@ export default class profilePage extends Component {
           </Option>
           ))}
           </Select>
-          
           <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
             onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
             <Text style={style.buttonFont}>{this.state.buttonName}</Text>
@@ -270,7 +275,6 @@ const style = StyleSheet.create({
     color: '#fff',
     fontSize: 20
   },
-
   tagFont_prof: {
     textAlign: "center",
     justifyContent: 'center',

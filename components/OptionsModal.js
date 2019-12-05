@@ -74,7 +74,7 @@ function ModalActions(props) {
     actions.push(
         <Option {...props} isClose={true} key={i} />
     )
-
+    
     var heightOfOptions = actions.length * OPTION_HEIGHT;
     var heightOfScreen = Dimensions.get('window').height;
 
