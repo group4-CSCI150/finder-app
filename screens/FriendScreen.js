@@ -54,7 +54,7 @@ export default class FriendScreen extends Component {
 
     return (
     <ScrollView style={style.container}>    
-    <Header title="Friends"/>
+    <Header back={true} title="Friend List" actions={[{name:'Logout', action: logout }]}/>
     <View style={style.header}></View>
     <View style={style.friendDisplay}>
       {newArray} 
