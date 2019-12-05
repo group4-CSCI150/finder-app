@@ -23,6 +23,7 @@ import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 import validator from 'validator';
 import Header from '../components/Header';
+import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
 
 export default class FriendScreen extends Component {
   constructor(props) {
@@ -31,47 +32,32 @@ export default class FriendScreen extends Component {
       data: [],
     };
   }
-
   componentWillMount() {
     this.fetchData();
   }
-  // friendList() {
-  //   return api.getFriends()
-  // }
   fetchData = async () => {
     const user = await api.getFriends()
     this.setState({data: user.users});
-
-    let newArray = this.state.data.map((friend) => {
-      // loop through friends array and create a new array with the names for the FlatList
-    })
   };
-  
  render() {
   logout = async () => {
     await token.removeToken()
     navigate('LoginNav')
   }
-    separate = () => {
-      <View style ={{
-        height: 1,
-      }}
-      />
-    }
+   var i = -1;
+     const newArray = this.state.data.map((friend) => {
+    i++;
+    return (
+      <Text key={i} style={style.texstyle} >{friend.name}</Text>
+    );
+  })
 
     return (
     <ScrollView style={style.container}>    
     <Header title="Friends"/>
     <View style={style.header}></View>
     <View style={style.friendDisplay}>
-    <FlatList 
-      data = {this.state.data}
-      keyExtractor = {(item, index) => 'key'+index}
-      renderItem = {({ item }) =>
-      <Text> {item.user.friends}</Text>
-      }
-      ItemSeparatorComponent={this.separate}
-    />
+      {newArray} 
     </View>
     </ScrollView>
     );
@@ -89,17 +75,7 @@ const style = StyleSheet.create({
     paddingLeft: 100,
     paddingRight: 60,
   },
-  header: {
-    textAlign: "center",
+  texstyle: {
     fontSize: 24,
-    color: '#FFFFFF',
-    borderColor: '#d6d7da',
-    backgroundColor: '#214786',
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginBottom: 10,
-    paddingLeft: 35,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FFFFFF',
-  },
+  }
 });
