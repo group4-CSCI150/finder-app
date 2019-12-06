@@ -11,12 +11,12 @@ body is a JSON object. e.g. {username: "Leo", password: "myPassword", email: "my
 */
 async function getCurrentUser() {
   try {
-    let username = await token.getToken()
-    username = JSON.parse(username).user.username
-    console.log(username)
-    let user = await axios.get(`${baseURL}byID/${username}`)
-    console.log(user.data)
-    return user.data.user
+    let tok = await token.getToken();
+    let username = tok.user.username;
+    console.log("Username from Token:", username);
+    let response = await axios.get(`${baseURL}byID/${username}`);
+    console.log(response.data);
+    return response.data.user;
   }catch{
     return "Error getting user"
   }
@@ -79,11 +79,23 @@ const api = {
   // Check if username and password match the ones in the DB then return if match.
   callLogin: async (body) => {
     try {
-      let user = await axios.post(`${baseURL}login`, body)
-      console.log("LOGIN: ", user.data)
-      return user.data
+      let response = await axios.post(`${baseURL}login`, body)
+      console.log("LOGIN: ", response.data)
+      return response.data
     }catch{
       throw Error("Error login user")
+    }
+  },
+
+  // Check if username and token match the ones in the DB then return if match.
+  callLoginToken: async (body) => {
+    try {
+      let response = await axios.post(`${baseURL}logintoken`, body);
+      console.log("Response: ", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error);
+      return { "message": "Error login" };
     }
   },
 
@@ -127,9 +139,11 @@ const api = {
 
   getMessages: async (body) => {
     body.requestType = 'getMessages';
+    console.log("Sending:", body);
     let response = await axios.post(`${chatURL}`, body);
     response = response.data;
     if (response.message === 'Success') {
+      console.log(response);
       console.log('Retrieved', response.numOfNewMessages, 'new messages.');
       console.log('Messages: ', response.newMessages);
     }

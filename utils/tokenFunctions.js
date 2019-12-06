@@ -4,8 +4,9 @@ const token = {
 
     storeToken: async (token) => {
         try {
-            console.log("Storing token")
-            await AsyncStorage.setItem('token', token);
+            console.log("Storing token");
+            let tok = Base64.encode(JSON.stringify(token));
+            await AsyncStorage.setItem('token', tok);
         } catch (error) {
             console.log("Error: ", error)
             alert(error)
@@ -16,8 +17,12 @@ const token = {
         try {
             console.log("Reading token")
             let val = await AsyncStorage.getItem('token');
-            if(val)
-                return Base64.decode(val);
+            if (val) {
+                return JSON.parse(Base64.decode(val));
+            }
+            else {
+                return null;
+            }
         } catch (error) {
             console.log("Error: ", error)
             alert(error)
