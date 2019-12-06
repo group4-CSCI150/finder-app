@@ -75,20 +75,8 @@ export default class ChatScreen extends React.Component {
     // Set up polling for chat updates
     /*
     this.listener = setInterval(() => {
-      //api.getChatUpdate();
-      newMessages = getChatUpdate();
-      if (newMessages.length > 0) { // If there are new messages
-        // Add _id and user properties to each new message
-        for (let i = 0; i < newMessages.length; i++) {
-          this.messageCount++;
-          newMessages[i]._id = this.messageCount;
-          newMessages[i].user = this.otherUser;
-        }
-        this.setState(previousState => ({
-          messages: GiftedChat.append(previousState.messages, newMessages)
-        }));
-      }
-    }, 6000);
+      this.getMessages();
+    }, 8000);
     */
 
     // Should be able to save and load previous messages
@@ -122,6 +110,7 @@ export default class ChatScreen extends React.Component {
       to: this.otherUser.username,
       from: this.thisUser.username,
       text: message.text,
+      createdAt: new Date(),
     }).then( (response) => {
       console.log(response);
     }).catch( (error) => {
