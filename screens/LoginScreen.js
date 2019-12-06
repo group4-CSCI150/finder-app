@@ -50,10 +50,18 @@ export default class LoginScreen extends Component {
         console.log(tok)
         this.props.navigation.navigate("MainNav")
       }
+      else {
+        this.setState({
+          hasMounted: true
+        })
+      }
     }
-    this.setState({
-      hasMounted: true
-    })
+    else {
+      this.setState({
+        hasMounted: true
+      })
+    }
+
   }
 
   getToken() {
