@@ -18,6 +18,8 @@ import {
 import { GiftedChat } from 'react-native-gifted-chat';
 import Header from '../components/Header';
 import api from '../utils/apiCaller';
+import token from '../utils/tokenFunctions';
+import ChatStorage from '../utils/chatStorage';
 
 function getChatUpdate() {
   return [
@@ -47,6 +49,7 @@ export default class ChatScreen extends React.Component {
     super(props);
     this.props = props;
     this.getMessages = this.getMessages.bind(this); // remember to bind class methods
+    this.deleteLocalMessages = this.deleteLocalMessages.bind(this);
     this.headerTitle = this.props.navigation.getParam('name', 'Finder')
     this.messageCount = 0;    // Variable used to assign _id to messages
 
@@ -64,12 +67,14 @@ export default class ChatScreen extends React.Component {
   }
 
   async componentDidMount() {
-    user = await api.getSelf();
+    tok = await token.getToken();
+    console.log(tok);
     this.thisUser = {
       _id: 1,
-      name: user.name,
+      name: tok.user.name,
       avatar: 'https://placeimg.com/140/140/any', // placeholder for actual avatar
-      username: user.username,
+      username: tok.user.username,
+      token: tok.token,
     }
 
     // Set up polling for chat updates
@@ -80,15 +85,11 @@ export default class ChatScreen extends React.Component {
     */
 
     // Should be able to save and load previous messages
+    oldMessages = await ChatStorage.getMessages(this.otherUser.username);
+    oldMessages.reverse();                      // Need to reverse messages for some reason
+    this.messageCount = oldMessages.length;     // Update messageCount to match number of old messages
     this.setState({
-      messages: [
-        {
-          _id: this.messageCount,
-          text: 'Hello world',
-          createdAt: new Date(),
-          user: this.otherUser,
-        },
-      ],
+      messages: oldMessages,
       componentHasLoaded: true,
     });
   }
@@ -104,6 +105,9 @@ export default class ChatScreen extends React.Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }));
 
+    // Next, save messages
+    ChatStorage.appendMessages(this.otherUser.username, messages);
+
     // Send to api
     message = messages[0];    
     api.sendMessage({
@@ -111,6 +115,7 @@ export default class ChatScreen extends React.Component {
       from: this.thisUser.username,
       text: message.text,
       createdAt: new Date(),
+      token: this.thisUser.token,
     }).then( (response) => {
       console.log(response);
     }).catch( (error) => {
@@ -120,7 +125,12 @@ export default class ChatScreen extends React.Component {
   }
 
   getMessages() {
-    api.getMessages({username: this.thisUser}).then( (newMessages) => {
+    request = {
+      username: this.thisUser.username,
+      token: this.thisUser.token,
+      from: this.otherUser.username,
+    }
+    api.getMessages(request).then( (newMessages) => {
       if (newMessages.length > 0) { // If there are new messages
         // Add _id and user properties to each new message
         for (let i = 0; i < newMessages.length; i++) {
@@ -128,13 +138,29 @@ export default class ChatScreen extends React.Component {
           newMessages[i]._id = this.messageCount;
           newMessages[i].user = this.otherUser;
         }
+        // Messages could be received out of order, so sort by their createdAt Dates
+        // The most recent message should be at the end
+        newMessages.sort(function(a, b) {
+          return (new Date(b.createdAt) - new Date(a.createdAt));
+        });
         this.setState(previousState => ({
           messages: GiftedChat.append(previousState.messages, newMessages)
         }));
+
+        // Finally, append newMessages to local storage
+        ChatStorage.appendMessages(this.otherUser.username, newMessages);
       }
     })
   }
 
+  deleteLocalMessages() {
+    ChatStorage.removeMessages(this.otherUser.username);
+    this.setState({
+      messages: [],
+    });
+    this.messageCount = 0;
+  }
+  
   render() {
     if (!this.state.componentHasLoaded) {
       return (
@@ -147,7 +173,9 @@ export default class ChatScreen extends React.Component {
     else {
       return (
         <SafeAreaView style={{flex: 1}}>
-          <Header title={this.headerTitle} back={true} actions={[{name: 'Get New Messages', action: this.getMessages}]}/>
+          <Header title={this.headerTitle} back={true} actions={[
+                  {name: 'Get New Messages', action: this.getMessages}, 
+                  {name: 'Delete messages', action: this.deleteLocalMessages}]}/>
           <GiftedChat 
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)} 
