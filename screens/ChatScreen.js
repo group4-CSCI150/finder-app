@@ -48,8 +48,13 @@ export default class ChatScreen extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.getMessages = this.getMessages.bind(this); // remember to bind class methods
+
+    // remember to bind class methods
+    this.getMessages = this.getMessages.bind(this); 
     this.deleteLocalMessages = this.deleteLocalMessages.bind(this);
+    this.listenForMessages = this.listenForMessages.bind(this);
+    this.stopListenForMessages = this.stopListenForMessages.bind(this);
+    
     this.headerTitle = this.props.navigation.getParam('name', 'Finder')
     this.messageCount = 0;    // Variable used to assign _id to messages
 
@@ -76,14 +81,7 @@ export default class ChatScreen extends React.Component {
       username: tok.user.username,
       token: tok.token,
     }
-
-    // Set up polling for chat updates
-    /*
-    this.listener = setInterval(() => {
-      this.getMessages();
-    }, 8000);
-    */
-
+  
     // Should be able to save and load previous messages
     oldMessages = await ChatStorage.getMessages(this.otherUser.username);
     oldMessages.reverse();                      // Need to reverse messages for some reason
@@ -95,6 +93,16 @@ export default class ChatScreen extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.listener);
+  }
+
+  listenForMessages() {
+    this.listener = setInterval(() => {
+      this.getMessages();
+    }, 5000);
+  }
+
+  stopListenForMessages() {
     clearInterval(this.listener);
   }
 
@@ -175,7 +183,9 @@ export default class ChatScreen extends React.Component {
         <SafeAreaView style={{flex: 1}}>
           <Header title={this.headerTitle} back={true} actions={[
                   {name: 'Get New Messages', action: this.getMessages}, 
-                  {name: 'Delete messages', action: this.deleteLocalMessages}]}/>
+                  {name: 'Delete messages', action: this.deleteLocalMessages},
+                  {name: 'Listen for messages', action: this.listenForMessages},
+                  {name: 'Stop listening for messages', action: this.stopListenForMessages},]}/>
           <GiftedChat 
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)} 
