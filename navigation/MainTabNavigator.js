@@ -12,7 +12,6 @@ import GuestProfileScreen from '../screens/GuestProfileScreen';
 import ChatSelectionScreen from '../screens/ChatSelectionScreen';
 import ChatScreen from '../screens/ChatScreen';
 
-
 const config = {
   headerMode: 'none',
   headerVisible: false,
