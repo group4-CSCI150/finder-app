@@ -9,7 +9,8 @@ import FriendScreen from '../screens/FriendScreen';
 import SearchScreen from '../screens/SearchScreen';
 import AdvancedSearchScreen from '../screens/AdvancedSearchScreen';
 import GuestProfileScreen from '../screens/GuestProfileScreen';
-
+import ChatSelectionScreen from '../screens/ChatSelectionScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 const config = {
   headerMode: 'none',
@@ -82,10 +83,28 @@ ProfileStack.navigationOptions = {
 
 ProfileStack.path = '';
 
+const ChatStack = createStackNavigator(
+  {
+    ChatSelection: ChatSelectionScreen,
+    Chat: ChatScreen,
+  },
+  config
+);
+
+ChatStack.navigationOptions = {
+  tabBarLabel: 'Chat',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-chatbubbles' : 'md-chatbubbles'} />
+  ),
+};
+
+ChatStack.path = '';
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   SearchStack,
   ProfileStack,
+  ChatStack,
 });
 
 tabNavigator.path = '';

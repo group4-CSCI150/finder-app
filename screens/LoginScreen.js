@@ -36,16 +36,32 @@ export default class LoginScreen extends Component {
       username: "",
       password: "",
       message: "",
-      editable: true
+      editable: true,
+      hasMounted: false,
     };
   }
 
   async componentDidMount() {
     let tok = await this.getToken();
+    console.log(tok);
     if (tok) {
-      console.log(tok)
-      this.props.navigation.navigate("MainNav")
+      let res = await api.callLoginToken( {username: tok.user.username, token: tok.token} );
+      if (res.message === "Success") {
+        console.log(tok)
+        this.props.navigation.navigate("MainNav")
+      }
+      else {
+        this.setState({
+          hasMounted: true
+        })
+      }
     }
+    else {
+      this.setState({
+        hasMounted: true
+      })
+    }
+
   }
 
   getToken() {
@@ -67,10 +83,10 @@ export default class LoginScreen extends Component {
         return;
       }
       this.setState({ editable: false })
-      let user = await api.callLogin({ username: this.state.username, password: this.state.password });
+      let response = await api.callLogin({ username: this.state.username, password: this.state.password });
       await token.removeToken();
-      await token.storeToken(Base64.encode(JSON.stringify(user)))
-      this.props.navigation.navigate("MainNav")
+      await token.storeToken(response);
+      this.props.navigation.navigate("MainNav");
     }
     catch{
       this.setState({ editable: true })
@@ -79,6 +95,12 @@ export default class LoginScreen extends Component {
   }
 
   render() {
+    if (!this.state.hasMounted) {
+      return (
+        <ActivityIndicator />
+      );
+    }
+
     const { navigate } = this.props.navigation;
     let error;
     if (this.state.message) {
