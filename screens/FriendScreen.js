@@ -1,9 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
-import {
-  Text,
-  Button,
-} from 'native-base';
+import { ListItem } from 'react-native-elements'
+
 import {
   StyleSheet,
   View,
@@ -13,17 +11,10 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
-import validator from 'validator';
 import Header from '../components/Header';
-import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
 
 export default class FriendScreen extends Component {
   constructor(props) {
@@ -37,29 +28,39 @@ export default class FriendScreen extends Component {
   }
   fetchData = async () => {
     const user = await api.getFriends()
-    this.setState({data: user.users});
+    console.log(user)
+    this.setState({ data: user.users });
   };
- render() {
-  logout = async () => {
-    await token.removeToken()
-    navigate('LoginNav')
-  }
-   var i = -1;
-     const newArray = this.state.data.map((friend) => {
-    i++;
-    return (
-      <Text key={i} style={style.texstyle} >{friend.name}</Text>
-    );
-  })
+
+
+  render() {
+    logout = async () => {
+      await token.removeToken()
+      navigate('LoginNav')
+    }
+    var i = -1;
+    const friendList = this.state.data.map((friend) => {
+      i++;
+      return (
+        <ListItem key={i}
+          title={friend.name}
+          subtitle={friend.description}
+          bottomDivider
+          leftAvatar={ {source:require('../images/stock_photo.jpg')}}
+          onPress={() => {
+            this.props.navigation.navigate('GuestProfile', { user: friend });
+          }} />
+      );
+    })
 
     return (
-    <ScrollView style={style.container}>    
-    <Header back={true} title="Friend List" actions={[{name:'Logout', action: logout }]}/>
-    <View style={style.header}></View>
-    <View style={style.friendDisplay}>
-      {newArray} 
-    </View>
-    </ScrollView>
+      <ScrollView style={style.container}>
+        <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout }]} />
+        <View style={style.header}>
+          {friendList}
+        </View>
+
+      </ScrollView>
     );
   }
 }
