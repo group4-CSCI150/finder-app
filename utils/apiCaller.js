@@ -102,7 +102,7 @@ const api = {
   getFriends: async () => {
     try {
       let username = await token.getToken()
-      username = JSON.parse(username).user.username
+      username = username.user.username
       let friends = await axios.get(`${baseURL}byIDList/${username}`)
       console.log("GET Friends: ", friends.data)
       return friends.data
@@ -152,6 +152,19 @@ const api = {
       console.log(response.message);
     }
     return response.newMessages;
+  },
+  addFriend: async (user) => {
+    let tok = await token.getToken();
+    let loggedInUser = tok.user.username;
+    let body = {
+      users: [loggedInUser, user]
+    }
+    let response = await axios.put(`${baseURL}addFriend`, body);
+    if(response.status == 200){
+      return response.data.message;
+    }else {
+      return "Error Adding Friend"
+    }
   }
 }
 
