@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native';
+import token from './tokenFunctions';
 
 /*
 Returns a list of usernames that the current user has a chat history with
@@ -6,7 +7,9 @@ Returns a list of usernames that the current user has a chat history with
 let getChatSessions = async () => {
     try {
         console.log("Getting chat sessions");
-        var users = await AsyncStorage.getItem('ChatSessions');
+        var tok = await token.getToken();
+        var thisUser = tok.user.username;
+        var users = await AsyncStorage.getItem(thisUser + '-ChatSessions');
         if (users !== null) {
             users = JSON.parse(users);
             console.log('Chat sessions:', users);
@@ -32,7 +35,9 @@ let createChatSession = async (user) => {
             users.push(user);
             console.log('New chat sessions:', users);
             users = JSON.stringify(users);
-            await AsyncStorage.setItem('ChatSessions', users);
+            var tok = await token.getToken();
+            var thisUser = tok.user.username;
+            await AsyncStorage.setItem(thisUser + '-ChatSessions', users);
         }
     }
     catch (error) {
@@ -48,8 +53,10 @@ let deleteChatSession = async (user) => {
             users.splice(index, 1);
             users = JSON.stringify(users);
             console.log('New chat sessions:', users);
-            await AsyncStorage.removeItem(user);
-            await AsyncStorage.setItem('ChatSessions', users);
+            var tok = await token.getToken();
+            var thisUser = tok.user.username;
+            await AsyncStorage.removeItem(thisUser + '-' + user);
+            await AsyncStorage.setItem(thisUser + '-ChatSessions', users);
         }
         else {
             console.log(user, 'not in', users);
@@ -64,7 +71,9 @@ let deleteChatSession = async (user) => {
 let getMessages = async (user) => {
     try {
         console.log("Getting messages");
-        messages = await AsyncStorage.getItem(user);
+        var tok = await token.getToken();
+        var thisUser = tok.user.username;
+        messages = await AsyncStorage.getItem(thisUser + '-' + user);
         if (messages !== null) {
             return JSON.parse(messages);
         }
@@ -80,7 +89,9 @@ let getMessages = async (user) => {
 let setMessages = async (user, messages) => {
     try {
         msgString = JSON.stringify(messages);
-        await AsyncStorage.setItem(user, msgString);
+        var tok = await token.getToken();
+        var thisUser = tok.user.username;
+        await AsyncStorage.setItem(thisUser + '-' + user, msgString);
         return true;
     }
     catch (error) {
@@ -96,7 +107,9 @@ let appendMessages = async (user, messages) => {
         oldMessages = await getMessages(user);
         // Next, append new messages to oldMessages and setItem
         newMessages = oldMessages.concat(messages);
-        await AsyncStorage.setItem(user, JSON.stringify(newMessages));
+        var tok = await token.getToken();
+        var thisUser = tok.user.username;
+        await AsyncStorage.setItem(thisUser + '-' + user, JSON.stringify(newMessages));
         return true;
     }
     catch (error) {
@@ -107,7 +120,9 @@ let appendMessages = async (user, messages) => {
 
 let removeMessages = async (user) => {
     try {
-        await AsyncStorage.removeItem(user);
+        var tok = await token.getToken();
+        var thisUser = tok.user.username;
+        await AsyncStorage.removeItem(thisUser + '-' + user);
         return true;
     }
     catch (error) {
