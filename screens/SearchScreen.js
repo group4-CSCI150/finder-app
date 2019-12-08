@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
     View,
     SafeAreaView,
+    Platform,
 } from 'react-native';
 
 import Header from '../components/Header';
 import FriendRecommendation from '../components/FriendRecommendation';
-
+import FadeInView from '../components/FadeInView';
+import ScreenContainer from '../components/ScreenContainer';
 import token from '../utils/tokenFunctions'
 
 
@@ -18,9 +20,11 @@ export default function SearchScreen(props) {
         navigate('LoginNav')
     }
     return (
-        <SafeAreaView style={{ marginBottom: 80 }}>
-            <Header actions={[{name:'Logout', action: logout }]}/>
-            <FriendRecommendation />
-        </SafeAreaView>
+        <ScreenContainer>
+            <FadeInView>
+                <Header actions={[{name:'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}]}/>
+                <FriendRecommendation />
+            </FadeInView>
+        </ScreenContainer>
     );
 }

@@ -101,13 +101,14 @@ const api = {
 
   getFriends: async () => {
     try {
-      let username = await token.getToken()
-      username = username.user.username
-      let friends = await axios.get(`${baseURL}byIDList/${username}`)
-      console.log("GET Friends: ", friends.data)
-      return friends.data
+      let tok = await token.getToken();
+      var username = tok.user.username;
+      let friends = await axios.get(`${baseURL}byIDList/${username}`);
+      console.log("GET Friends: ", friends.data);
+      return friends.data;
     }catch{
-      return "Error getting friends"
+      console.log("Error getting friends");
+      return "Error getting friends";
     }
   },
 
