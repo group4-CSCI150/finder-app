@@ -115,6 +115,7 @@ const api = {
   getRecommendations: async () => {
     //try {
       let _user = await getCurrentUser();
+      console.log('Getting recommendations for', _user);
       let _username = _user.username;
       let _tags = _user.tags;
       let body = {
