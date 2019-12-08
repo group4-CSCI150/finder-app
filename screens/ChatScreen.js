@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Header from '../components/Header';
+import ScreenContainer from '../components/ScreenContainer';
 import api from '../utils/apiCaller';
 import token from '../utils/tokenFunctions';
 import ChatStorage from '../utils/chatStorage';
@@ -82,7 +83,7 @@ export default class ChatScreen extends React.Component {
       token: tok.token,
     }
   
-    // Should be able to save and load previous messages
+    // save and load previous messages
     oldMessages = await ChatStorage.getMessages(this.otherUser.username);
     oldMessages.reverse();                      // Need to reverse messages for some reason
     this.messageCount = oldMessages.length;     // Update messageCount to match number of old messages
@@ -90,16 +91,27 @@ export default class ChatScreen extends React.Component {
       messages: oldMessages,
       componentHasLoaded: true,
     });
+
+    // Add didFocus and didBlur listeners to manage firebase polling
+    this.focusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      this.listenForMessages();
+    });
+    this.blurListener = this.props.navigation.addListener('didBlur', (payload) => {
+      this.stopListenForMessages();
+    })
   }
 
   componentWillUnmount() {
     clearInterval(this.listener);
+    this.focusListener.remove();
+    this.blurListener.remove();
   }
 
   listenForMessages() {
+    // Poll for new messages every four seconds
     this.listener = setInterval(() => {
       this.getMessages();
-    }, 5000);
+    }, 4000);
   }
 
   stopListenForMessages() {
@@ -169,6 +181,12 @@ export default class ChatScreen extends React.Component {
     this.messageCount = 0;
   }
   
+  renderChatFooter(props) {
+    return (
+      <View style={{width: '100%', height: 50, backgroundColor: 'white'}} />
+    );
+  }
+
   render() {
     if (!this.state.componentHasLoaded) {
       return (
@@ -180,18 +198,20 @@ export default class ChatScreen extends React.Component {
     }
     else {
       return (
-        <SafeAreaView style={{flex: 1}}>
+        <ScreenContainer>
           <Header title={this.headerTitle} back={true} actions={[
-                  {name: 'Get New Messages', action: this.getMessages}, 
-                  {name: 'Delete messages', action: this.deleteLocalMessages},
-                  {name: 'Listen for messages', action: this.listenForMessages},
-                  {name: 'Stop listening for messages', action: this.stopListenForMessages},]}/>
+                  //{name: 'Get New Messages', action: this.getMessages}, 
+                  {name: 'Delete messages', action: this.deleteLocalMessages, iconName: Platform.OS === 'ios' ? 'ios-remove-circle' : 'md-remove-circle'}
+                  //{name: 'Listen for messages', action: this.listenForMessages},
+                  //{name: 'Stop listening for messages', action: this.stopListenForMessages},
+          ]}/>
           <GiftedChat 
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)} 
             user={this.thisUser}
+            renderQuickReplies={this.renderChatFooter}
           />
-        </SafeAreaView>
+        </ScreenContainer>
       );
     }
   }
