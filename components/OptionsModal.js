@@ -9,13 +9,14 @@ import {
     Animated,
     Easing,
     Dimensions,
-    StyleSheet
+    StyleSheet,
+    Platform,
 } from 'react-native'; 
 import { Ionicons } from '@expo/vector-icons';
 import SlideInFromBottomView from './SlideInFromBottomView';
 
 
-var OPTION_HEIGHT = 80;
+var OPTION_HEIGHT = 70;
 
 
 function Background(props) {
@@ -39,18 +40,25 @@ function Background(props) {
 }
 
 function Option(props) {
+    var dashedLine = props.isClose ? 
+        <View style={{width: '100%', height: 0, borderStyle: 'dashed', borderColor: '#222', borderWidth: 1}} /> 
+        : <View />
+
+    var iconName = props.iconName ? props.iconName : "md-close"; 
+
     return (
         <TouchableOpacity onPress={() => {if (props.action) {props.action()}; props.close() }}>
             <View style={{width: '100%', height: OPTION_HEIGHT}}>
+                {dashedLine}
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <View style={{width: '30%', height: '100%'}}>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Ionicons name={props.iconName ? props.iconName : 'md-close'} size={OPTION_HEIGHT} color='white'/>
+                            <Ionicons name={iconName} size={OPTION_HEIGHT * 0.5} color='white'/>
                         </View>
                     </View>
                     <View style={{width: '70%', height: '100%'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={styles.optionText}>{props.isClose ? 'Close' : props.name}</Text>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'left'}}>
+                            <Text style={{fontSize: 25, color: 'white'}}>{props.isClose ? 'Close' : props.name}</Text>
                         </View>
                     </View>
                 </View>
@@ -66,7 +74,7 @@ function ModalActions(props) {
         actions = props.actions.map( (action) => {
             i++;
             return (
-                <Option {...props} name={action.name} action={action.action} key={i} />
+                <Option {...props} name={action.name} action={action.action} iconName={action.iconName} key={i} />
             );
         });
     }
@@ -77,13 +85,16 @@ function ModalActions(props) {
     
     var heightOfOptions = actions.length * OPTION_HEIGHT;
     var heightOfScreen = Dimensions.get('window').height;
+    if (Platform.OS === 'android') {
+        // TODO: Fix options clipping on android
+    }
 
     return (
         <View>
             <TouchableWithoutFeedback onPress={props.close}>
                 <View style={{width: '100%', height: heightOfScreen-heightOfOptions}} />
             </TouchableWithoutFeedback>
-            <SlideInFromBottomView style={{width: '100%', height:heightOfOptions, backgroundColor: '#333'}}>
+            <SlideInFromBottomView style={{width: '100%', height:heightOfOptions, backgroundColor: '#444'}}>
                 {actions}
             </SlideInFromBottomView>
         </View>
@@ -124,4 +135,9 @@ var styles = StyleSheet.create({
         fontSize: 30,
         color: 'white'
     },
+    closeOptionContainer: {
+        borderColor: '#222', 
+        borderStyle: 'dotted', 
+        borderTopWidth: 1,
+    }
 });
