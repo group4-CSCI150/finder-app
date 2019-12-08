@@ -32,7 +32,6 @@ async function loadFriendRecommendation() {
 var FRIEND_REC_WIDTH = Dimensions.get('window').width * 0.75;
 var FRIEND_REC_HEIGHT = FRIEND_REC_WIDTH * 1.5;
 
-
 class FriendRecommendationDisplay extends React.Component {
     constructor(props) {
         super(props);
@@ -225,7 +224,10 @@ function FriendRecommendation(props) {
         {
             iconName: Platform.OS === 'ios' ? 'ios-person-add' : 'md-person-add',
             actionName: 'Add Friend',
-            action: function() {}
+            action: async function() {
+                await api.addFriend(friendData[currentFriendIndex].username)
+                setShouldRefresh(true); setFriendLoaded(false);
+            }
         },
         {
             iconName: Platform.OS === 'ios' ? 'ios-eye' : 'md-eye',
