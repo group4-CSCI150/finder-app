@@ -9,57 +9,64 @@ import {
   View,
   TextInput,
   ScrollView,
+  TouchableOpacity,
   Image,
   ActivityIndicator,
   FlatList,
+  Platform,
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
-import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
-import validator from 'validator';
 import Header from '../components/Header';
-import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
+import ScreenContainer from '../components/ScreenContainer';
 
 export default class FriendScreen extends Component {
   constructor(props) {
     super(props);
+    this.props = props;
     this.state = {
       data: [],
     };
   }
-  componentWillMount() {
+  
+  componentDidMount() {
     this.fetchData();
   }
-  fetchData = async () => {
+
+  async fetchData() {
     const user = await api.getFriends()
     this.setState({data: user.users});
-  };
+  }
+
  render() {
   logout = async () => {
     await token.removeToken()
     navigate('LoginNav')
   }
    var i = -1;
-     const newArray = this.state.data.map((friend) => {
+   console.log("Data:", this.state.data);
+    const newArray = this.state.data.map((friend) => {
     i++;
     return (
-      <Text key={i} style={style.texstyle} >{friend.name}</Text>
+      <TouchableOpacity key={i} onPress={ () => {this.props.navigation.navigate('ViewFriendProfile', {user: friend, isFriend: true})} }>
+        <View style={{width: '100%', height: 80}}>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+            <Text style={{color: '#E0E0E0', marginLeft: 20, fontSize: 30}} >{friend.name}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
     );
   })
 
     return (
-    <ScrollView style={style.container}>    
-    <Header back={true} title="Friend List" actions={[{name:'Logout', action: logout }]}/>
-    <View style={style.header}></View>
-    <View style={style.friendDisplay}>
-      {newArray} 
-    </View>
-    </ScrollView>
+    <ScreenContainer>    
+      <Header back={true} title="Friend List" actions={[{name:'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}]}/>
+      <ScrollView>
+        <View style={style.friendDisplay}>
+          {newArray} 
+        </View>
+      </ScrollView>
+    </ScreenContainer>
     );
   }
 }

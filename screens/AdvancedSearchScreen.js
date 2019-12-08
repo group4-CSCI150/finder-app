@@ -13,19 +13,16 @@ import {
 } from 'react-native';
 
 import Header from '../components/Header';
-
+import ScreenContainer from '../components/ScreenContainer';
 
 
 export default function AdvancedSearchScreen(props) {
     return (
-        <SafeAreaView>
+        <ScreenContainer>
             <Header back={true} />
             <View>
-                <View>
-                    
-                </View>
-                <Text>TODO: Implement advanced search</Text>
+                <Text style={{color: '#E0E0E0'}}>TODO: Implement advanced search</Text>
             </View>
-        </SafeAreaView>
+        </ScreenContainer>
     );
 }
