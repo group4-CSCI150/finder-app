@@ -36,7 +36,7 @@ export default class profilePage extends Component {
       name: "Name",
       age: "Age",
       desc: "Bio",
-      tag: "Interests",
+      tag: [],
       username: "",
       isEdit: false,  // editablity of text input - true when edit
       buttonName: "Edit Profile", // default - on button press, title will change to confirm changes
@@ -59,9 +59,8 @@ export default class profilePage extends Component {
     this.setState(
       {
         name: _user.name,
-        age: _user.age,
         desc: _user.description,
-        tag: _user.tags,
+        tag: _user.tags ? _user.tags : [],
         username: _user.username
       }
     )
@@ -162,7 +161,7 @@ export default class profilePage extends Component {
               </View>
               <Select 
                 onSelect = {this.onSelect.bind(this)}
-                defaultText = {this.state.tag.toString()} 
+                defaultText = {this.state.tag ? this.state.tag.toString() : ''} 
                 textStyle = {{color: '#E0E0E0', fontSize: 20}}
                 style={{backgroundColor: 'rgba(150, 150, 150, 0.4)', marginTop: 10, 
                         borderRadius: 30, borderColor: 'transparent', minWidth: '75%'}}
