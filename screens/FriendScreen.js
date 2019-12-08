@@ -59,12 +59,14 @@ export default class FriendScreen extends Component {
     })
 
     return (
-      <ScrollView style={style.container}>
-        <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out" }]} />
-        <View style={style.header}>
-          {friendList}
-        </View>
-      </ScrollView>
+      <ScreenContainer>
+        <ScrollView style={style.container}>
+          <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out" }]} />
+          <View style={style.header}>
+            {friendList}
+          </View>
+        </ScrollView>
+      </ScreenContainer>
     );
   }
 }

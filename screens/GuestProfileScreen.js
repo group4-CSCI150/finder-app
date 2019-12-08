@@ -69,8 +69,8 @@ export default function GuestProfileScreen(props) {
     }
     else {
         headerActions = [
-            {name: 'Add Friend', iconName: Platform.OS === 'ios' ? 'ios-person-add' : 'md-person-add'},
-            //action: api.addFriend(user.username)},
+            {name: 'Add Friend', iconName: Platform.OS === 'ios' ? 'ios-person-add' : 'md-person-add',
+            action: () => {api.addFriend(user.username)}},
             {name: 'Report', iconName: Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'}
             //action: api.sendReport(user.username)},
         ];
@@ -116,7 +116,8 @@ export default function GuestProfileScreen(props) {
                     <View style={{width: '100%', height: 100}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <MyButton title={"Add Friend"} iconName={Platform.OS === 'ios' ? 'ios-add' : 'md-add'} 
-                                    iconOnLeft={true} iconSize={30}/>
+                                    iconOnLeft={true} iconSize={30}
+                                    onPress={() => {api.addFriend(user.username)}}/>
                         </View>
                     </View>
                     : 
