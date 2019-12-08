@@ -1,5 +1,66 @@
 import { AsyncStorage } from 'react-native';
 
+/*
+Returns a list of usernames that the current user has a chat history with
+*/
+let getChatSessions = async () => {
+    try {
+        console.log("Getting chat sessions");
+        var users = await AsyncStorage.getItem('ChatSessions');
+        if (users !== null) {
+            users = JSON.parse(users);
+            console.log('Chat sessions:', users);
+            return users;
+        }
+        else {
+            console.log('No chat sessions')
+            return [];
+        }
+    }
+    catch (error) {
+        console.log('Could not get chat sessions')
+    }
+};
+
+let createChatSession = async (user) => {
+    try {
+        var users = await getChatSessions();
+        if (users.includes(user)) {
+            return;
+        }
+        else {
+            users.push(user);
+            console.log('New chat sessions:', users);
+            users = JSON.stringify(users);
+            await AsyncStorage.setItem('ChatSessions', users);
+        }
+    }
+    catch (error) {
+        console.log('Could not create chat session with', user);
+    }
+};
+
+let deleteChatSession = async (user) => {
+    try {
+        var users = await getChatSessions();
+        var index = users.indexOf(user);
+        if (index > -1) {
+            users.splice(index, 1);
+            users = JSON.stringify(users);
+            console.log('New chat sessions:', users);
+            await AsyncStorage.removeItem(user);
+            await AsyncStorage.setItem('ChatSessions', users);
+        }
+        else {
+            console.log(user, 'not in', users);
+            return;
+        }
+    }
+    catch (error) {
+        console.log('Could not delete chat session with', user);
+    }
+};
+
 let getMessages = async (user) => {
     try {
         console.log("Getting messages");
@@ -55,6 +116,12 @@ let removeMessages = async (user) => {
 };
 
 const storage = {
+    getChatSessions: getChatSessions,
+
+    createChatSession: createChatSession,
+
+    deleteChatSession: deleteChatSession,
+
     getMessages: getMessages,
     
     setMessages: setMessages,
