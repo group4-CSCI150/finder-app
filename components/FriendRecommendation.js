@@ -209,7 +209,7 @@ function FriendRecommendation(props) {
         ).catch( (e) => {
             console.log('Could not load recommendation');
             console.log(e);
-            setFriendData([{name: 'Error'}, {name: 'Could not load recommendations'}]);
+            setFriendData([]);
             setFriendLoaded(true);
             setShouldRefresh(false);
             setRefreshing(false);
@@ -237,7 +237,10 @@ function FriendRecommendation(props) {
             iconName: Platform.OS === 'ios' ? 'ios-eye' : 'md-eye',
             actionName: 'View Profile',
             action: function() {
-                props.navigation.navigate('GuestProfile', { user: friendData[currentFriendIndex] });
+                // Special case: If friendData didn't return anything
+                if (friendData.length > 0) {
+                    props.navigation.navigate('GuestProfile', { user: friendData[currentFriendIndex] });
+                }
             }
         }
     ];
