@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import Constants from 'expo-constants';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -70,7 +71,7 @@ const ProfileStack = createStackNavigator(
   {
     Profile: ProfileScreen,
     Friend: FriendScreen,
-    GuestProfile: GuestProfileScreen,
+    ViewFriendProfile: GuestProfileScreen,
   },
   config
 );
