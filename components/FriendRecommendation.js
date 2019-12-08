@@ -12,9 +12,11 @@ import {
     Animated,
     Easing,
     PanResponder,
+    StyleSheet
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import FadeInFromRightView from './FadeInFromRightView';
+import FadeInView from './FadeInView';
+import MyButton from './MyButton';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../utils/apiCaller';
 
@@ -28,6 +30,11 @@ async function loadFriendRecommendation() {
     return users;
 }
 
+var styles = StyleSheet.create({
+    text: {
+        color: '#E0E0E0',
+    }
+})
 
 var FRIEND_REC_WIDTH = Dimensions.get('window').width * 0.75;
 var FRIEND_REC_HEIGHT = FRIEND_REC_WIDTH * 1.5;
@@ -89,40 +96,53 @@ class FriendRecommendationDisplay extends React.Component {
         if (!this.props.friendLoaded) {
             return (
                 <View style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}}>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                <ActivityIndicator size='large' />
-                                <Text>Loading</Text>
-                            </View>
-                        </View>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <ActivityIndicator size='large' color={'#E0E0E0'} />
+                        <Text style={styles.text}>Loading</Text>
                     </View>
                 </View>
             );
         }
         else {
+            // Special case: If no friends were recommended
+            if (this.props.friendData.length === 0) {
+                return (
+                    <View style={{width: '100%', height: FRIEND_REC_HEIGHT + 20}}>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{color: '#E0E0E0', fontSize: 25}}>
+                                No recommendations were found. Is your profile set up yet?
+                            </Text>
+                        </View>
+                    </View>
+                );
+            }
             var i = -1;
             var friends = this.props.friendData.map( (friend) => {
                 i++;
                 return (
-                    <FadeInFromRightView key={i} initialLeft={0} style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
+                    <FadeInView key={i} initialLeft={0} style={{width: Dimensions.get('window').width, height: FRIEND_REC_HEIGHT + 20}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <View style={{overflow: 'hidden', width: FRIEND_REC_WIDTH, height: FRIEND_REC_HEIGHT, borderWidth: 1, 
-                                        borderColor: 'black', borderRadius: 30, backgroundColor: '#DDD'}} {...this._panResponder.panHandlers}>
+                                        borderColor: 'transparent', borderRadius: 25}} {...this._panResponder.panHandlers}>
                                 <View style={{width: '100%', height: '80%'}}>
                                     <Image source={require('../images/stock_photo.jpg')} style={{width: '100%', height: '100%'}} /> 
                                 </View>
-                                <View style={{width: '100%', height: '20%'}}>
-                                    <Text>{friend.name ? friend.name : 'Error: no name'}</Text>
-                                    <Text>{friend.tags ? 'Likes ' + friend.tags.join(', ') : 'Error: no tags'}</Text>
+                                <View style={{width: '100%', height: '20%', backgroundColor: 'rgba(200, 200, 200, 0.25)'}}>
+                                    <View style={{flex: 1, justifyContent: 'space-evenly', marginLeft: 10}}>
+                                        <Text style={[styles.text, {fontSize: 25}]}>{friend.name ? friend.name : 'Error: no name'}</Text>
+                                        <Text style={styles.text}>{friend.tags ? 'Likes ' + friend.tags.join(', ') : 'Error: no tags'}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </FadeInFromRightView>
+                    </FadeInView>
                 );
             });
             return (
                 <View style={{width: this.props.friendData.length * this.windowWidth, height: FRIEND_REC_HEIGHT + 20, overflow: 'visible'}}>
+                    <View style={{position: 'absolute', bottom: 0, left: 2, zIndex: 1}}>
+                        <Text style={styles.text}>{this.props.currentFriendIndex + 1}/{friends.length}</Text>
+                    </View>
                     <Animated.View style={{flex: 1, flexDirection: 'row', left: this.state.left}}>
                         {friends}
                     </Animated.View>
@@ -152,8 +172,8 @@ function FriendRecommendationButtons(props) {
             return (
                 <TouchableOpacity onPress={action.action ? action.action : function() {} } key={i}>
                     <View style={{width: 75, height: BUTTONS_HEIGHT}}>
-                        <Ionicons style={{textAlign: 'center'}} name={action.iconName} size={BUTTONS_HEIGHT * 0.5} color={action.color ? action.color : 'black'}/>
-                        <Text style={{fontSize: BUTTONS_HEIGHT * 0.25, textAlign: 'center'}}>
+                        <Ionicons style={{textAlign: 'center'}} name={action.iconName} size={BUTTONS_HEIGHT * 0.5} color={action.color ? action.color : '#E0E0E0'}/>
+                        <Text style={[styles.text, {fontSize: BUTTONS_HEIGHT * 0.25, textAlign: 'center'}]}>
                             {action.actionName}
                         </Text>
                     </View>
@@ -168,20 +188,6 @@ function FriendRecommendationButtons(props) {
                 {buttons}
             </View>
         </View>
-    );
-}
-
-function MyButton(props) {
-    return (
-        <TouchableOpacity onPress={props.onPress ? props.onPress : function() {}}>
-            <View style={{width: 200, height: 80, borderRadius: 30, borderColor: 'black', borderWidth: 1}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <Text>
-                        {props.title}
-                    </Text>
-                </View>
-            </View>
-        </TouchableOpacity>
     );
 }
 
@@ -247,11 +253,12 @@ function FriendRecommendation(props) {
                                              currentFriendIndex={currentFriendIndex} setCurrentFriendIndex={setCurrentFriendIndex}
                 />
                 <FriendRecommendationButtons actions={actions}/>
-                <View style={{width: '100%', height: 200}}>
+                <View style={{width: '100%', height: 150}}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         <MyButton title='Advanced Search' onPress={function() {props.navigation.navigate('AdvancedSearch')}}/>
                     </View>
                 </View>
+                <View style={{width: 0, height: 150}} />
             </ScrollView>
         </View>
     );
