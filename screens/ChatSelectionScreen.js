@@ -25,6 +25,7 @@ import Header from '../components/Header';
 import FadeInView from '../components/FadeInView';
 import OptionsModal from '../components/OptionsModal';
 
+DEBUG = false;
 
 /*
 props:
@@ -118,7 +119,12 @@ class ChatSelectionScreen extends React.Component  {
             return <ChatSession key={i} user={{username: username}} refreshChats={this.refreshChats}
                                 onPress={() => {this.props.navigation.navigate('Chat', {name: username, username: username})}}/>
         });
-        chatSessions.push( <ChatSession key={1} user={{username: 'Brandon'}} onPress={() => {this.props.navigation.navigate('Chat', {name: 'Brandon', username: 'Brandon'})}} /> )
+
+        // Debug purposes only
+        if (DEBUG) {
+            chatSessions.push( <ChatSession key={1} user={{username: 'Brandon'}} onPress={() => {this.props.navigation.navigate('Chat', {name: 'Brandon', username: 'Brandon'})}} /> )
+        }
+        
         return chatSessions;
     }
 
