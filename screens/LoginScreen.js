@@ -113,14 +113,7 @@ export default class LoginScreen extends Component {
 
     return (
       <ScrollView style={styles.container}>
-        <Header back={false} title="Login" />
-
-        {/* <View style={styles.header}>
-          <Text style={styles.headerTitle}>
-            <Image source={require('../images/bulldog.png')} style={{ width: 40, height: 40 }} />
-            Login
-          </Text>
-        </View> */}
+        <Header title="Login"/>
         <Container>
           <Card style={{ paddingBottom: 20 }}>
             {error}
