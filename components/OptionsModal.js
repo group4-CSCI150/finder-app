@@ -57,7 +57,7 @@ function Option(props) {
                         </View>
                     </View>
                     <View style={{width: '70%', height: '100%'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'left'}}>
+                        <View style={{flex: 1, justifyContent: 'center'}}>
                             <Text style={{fontSize: 25, color: 'white'}}>{props.isClose ? 'Close' : props.name}</Text>
                         </View>
                     </View>

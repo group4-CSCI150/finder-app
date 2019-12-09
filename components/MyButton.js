@@ -38,7 +38,7 @@ export default function MyButton(props) {
     
     return (
         <TouchableOpacity onPress={props.onPress ? props.onPress : function() {}}>
-            <View style={{width: 200, height: 70, borderRadius: '50%', borderColor: '#FF6017', borderWidth: 2, backgroundColor: 'white'}}>
+            <View style={{width: 200, height: 70, borderRadius: 50, borderColor: '#FF6017', borderWidth: 2, backgroundColor: 'white'}}>
                 {content}
             </View>
         </TouchableOpacity>
