@@ -163,6 +163,7 @@ const style = StyleSheet.create({
     marginHorizontal: 16,
     paddingLeft: 60,
     paddingRight: 60,
+    marginBottom: 60,
   },
   header: {
     textAlign: "center",
@@ -196,7 +197,7 @@ const style = StyleSheet.create({
   textInput: {
     alignSelf: 'stretch',
     height: 40,
-    marginBottom: 15,
+    marginBottom: 10,
     color: '#000',
     borderBottomWidth: 1,
     backgroundColor: '#f8f8f8',
@@ -207,6 +208,9 @@ const style = StyleSheet.create({
     width: 40,
     marginLeft: 15,
     marginTop: 15,
+  },
+  nothing: {
+    height:100,
   }
 
 });
