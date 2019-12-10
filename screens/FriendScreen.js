@@ -61,7 +61,7 @@ export default class FriendScreen extends Component {
     return (
       <ScreenContainer>
         <ScrollView style={style.container}>
-          <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out" }]} />
+          <Header back={true} title="Friends" actions={[{ name: 'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out" }]} />
           <View style={style.header}>
             {friendList}
           </View>
