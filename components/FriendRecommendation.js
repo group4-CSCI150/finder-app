@@ -231,6 +231,9 @@ function FriendRecommendation(props) {
             iconName: Platform.OS === 'ios' ? 'ios-person-add' : 'md-person-add',
             actionName: 'Add Friend',
             action: async function() {
+                if (friendData.length == 0) {
+                    return;
+                }
                 await api.addFriend(friendData[currentFriendIndex].username)
                 setShouldRefresh(true); setFriendLoaded(false);
             }

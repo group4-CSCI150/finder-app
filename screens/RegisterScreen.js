@@ -7,6 +7,8 @@ import {
 import {
   StyleSheet,
   View,
+  ScrollView,
+  KeyboardAvoidingView,
   TextInput,
   ActivityIndicator
 } from 'react-native';
@@ -52,10 +54,10 @@ export default class RegisterScreen extends Component {
         this.setState({ message: "Password do not match" })
         return;
       }
-      else if (this.state.check == 0) {
+      /*else if (this.state.check == 0) {
         this.setState({ message: "Please check Term of Service" })
         return;
-      }
+      }*/
       this.setState({ editable: false })
       let user = await api.createUser({ username: this.state.username, DOB: this.state.DOB, name: this.state.name, email: this.state.email, password: this.state.password });
       this.setState({ editable: true })
@@ -85,69 +87,71 @@ export default class RegisterScreen extends Component {
     return (
       <ScreenContainer>
         <Header title="Register" back={true}/>
-        <View>{error}</View>
-        <View style={style.containerTextInput}>
-          <Text style={{ marginTop: 10, color: '#E0E0E0' }}>Username:</Text>
-          <TextInput
-            editable={this.state.editable}
-            style={style.textInput}
-            placeholder="Fresno State Username "
-            onChangeText={(username) => this.setState({ username })}
-            value={this.state.username}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={{color: '#E0E0E0'}}>Email:</Text>
-          <TextInput
-            editable={this.state.editable}
-            style={style.textInput}
-            placeholder="Fresno State Email"
-            onChangeText={(email) => this.setState({ email: email })}
-            value={this.state.email}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={{color: '#E0E0E0'}}>Name:</Text>
-          <TextInput
-            editable={this.state.editable}
-            style={style.textInput}
-            placeholder="John"
-            onChangeText={(name) => this.setState({ name })}
-            value={this.state.name}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={{color: '#E0E0E0'}}>Date of Birth:</Text>
-          <TextInput
-            editable={this.state.editable}
-            style={style.textInput}
-            placeholder="mm-dd-yyyy"
-            onChangeText={(DOB) => this.setState({ DOB })}
-            value={this.state.DOB}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={{color: '#E0E0E0'}}>Password:</Text>
-          <TextInput
-            editable={this.state.editable}
-            secureTextEntry={true}
-            style={style.textInput}
-            placeholder="*********"
-            onChangeText={(password) => this.setState({ password })}
-            value={this.state.password}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={{color: '#E0E0E0'}}>Confirm Password:</Text>
-          <TextInput
-            editable={this.state.editable}
-            secureTextEntry={true}
-            style={style.textInput}
-            placeholder="*********"
-            onChangeText={(confirmPW) => this.setState({ confirmPW })}
-            value={this.state.confirmPW}
-            underlineColorAndroid={'transparent'}
-          />
-          <Button style={style.button} onPress={this.signUp}>
-            <Text style={style.btnText}>Sign Up</Text>
-          </Button>
-          {loading}
-        </View>
+        <KeyboardAvoidingView behavior="padding" enabled keyboardVerticalOffset={0}><ScrollView>
+          <View>{error}</View>
+          <View style={style.containerTextInput}>
+            <Text style={{ marginTop: 10, color: '#E0E0E0' }}>Username:</Text>
+            <TextInput
+              editable={this.state.editable}
+              style={style.textInput}
+              placeholder="Fresno State Username "
+              onChangeText={(username) => this.setState({ username })}
+              value={this.state.username}
+              underlineColorAndroid={'transparent'}
+            />
+            <Text style={{color: '#E0E0E0'}}>Email:</Text>
+            <TextInput
+              editable={this.state.editable}
+              style={style.textInput}
+              placeholder="Fresno State Email"
+              onChangeText={(email) => this.setState({ email: email })}
+              value={this.state.email}
+              underlineColorAndroid={'transparent'}
+            />
+            <Text style={{color: '#E0E0E0'}}>Name:</Text>
+            <TextInput
+              editable={this.state.editable}
+              style={style.textInput}
+              placeholder="John"
+              onChangeText={(name) => this.setState({ name })}
+              value={this.state.name}
+              underlineColorAndroid={'transparent'}
+            />
+            <Text style={{color: '#E0E0E0'}}>Date of Birth:</Text>
+            <TextInput
+              editable={this.state.editable}
+              style={style.textInput}
+              placeholder="mm-dd-yyyy"
+              onChangeText={(DOB) => this.setState({ DOB })}
+              value={this.state.DOB}
+              underlineColorAndroid={'transparent'}
+            />
+            <Text style={{color: '#E0E0E0'}}>Password:</Text>
+            <TextInput
+              editable={this.state.editable}
+              secureTextEntry={true}
+              style={style.textInput}
+              placeholder="*********"
+              onChangeText={(password) => this.setState({ password })}
+              value={this.state.password}
+              underlineColorAndroid={'transparent'}
+            />
+            <Text style={{color: '#E0E0E0'}}>Confirm Password:</Text>
+            <TextInput
+              editable={this.state.editable}
+              secureTextEntry={true}
+              style={style.textInput}
+              placeholder="*********"
+              onChangeText={(confirmPW) => this.setState({ confirmPW })}
+              value={this.state.confirmPW}
+              underlineColorAndroid={'transparent'}
+            />
+            <Button style={style.button} onPress={this.signUp}>
+              <Text style={style.btnText}>Sign Up</Text>
+            </Button>
+            {loading}
+          </View>
+        </ScrollView></KeyboardAvoidingView>
       </ScreenContainer>
     );
   }
