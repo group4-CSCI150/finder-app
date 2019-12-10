@@ -8,8 +8,6 @@ import {
   ScrollView,
   View,
   Image,
-  TouchableOpacity,
-  KeyboardAvoidingView,
   ActivityIndicator,
   Platform,
 } from 'react-native';
@@ -24,7 +22,6 @@ import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 
 var listTags= [ "art", "reading", "writing", "dance", "cooking", "coding", "sports","gaming"];
-var selectedTags = [];
 
 export default class profilePage extends Component {
   constructor(props) {
