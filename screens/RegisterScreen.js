@@ -8,24 +8,14 @@ import {
   StyleSheet,
   View,
   TextInput,
-  ScrollView,
-  Image,
   ActivityIndicator
 } from 'react-native';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
 import Header from '../components/Header';
+import ScreenContainer from '../components/ScreenContainer';
 
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import validator from 'validator';
-
-var ToS = [
-  { label: "Term of Service", value: "0", width: 10 },
-]
 
 export default class RegisterScreen extends Component {
   constructor(props) {
@@ -93,11 +83,11 @@ export default class RegisterScreen extends Component {
       loading = <ActivityIndicator size="large" color="#0000ff" />
     }
     return (
-      <ScrollView style={style.container}>
+      <ScreenContainer>
         <Header title="Register" back={true}/>
         <View>{error}</View>
         <View style={style.containerTextInput}>
-          <Text style={{ marginTop: 10 }}>Username:</Text>
+          <Text style={{ marginTop: 10, color: '#E0E0E0' }}>Username:</Text>
           <TextInput
             editable={this.state.editable}
             style={style.textInput}
@@ -106,7 +96,7 @@ export default class RegisterScreen extends Component {
             value={this.state.username}
             underlineColorAndroid={'transparent'}
           />
-          <Text>Email:</Text>
+          <Text style={{color: '#E0E0E0'}}>Email:</Text>
           <TextInput
             editable={this.state.editable}
             style={style.textInput}
@@ -115,7 +105,7 @@ export default class RegisterScreen extends Component {
             value={this.state.email}
             underlineColorAndroid={'transparent'}
           />
-          <Text>Name:</Text>
+          <Text style={{color: '#E0E0E0'}}>Name:</Text>
           <TextInput
             editable={this.state.editable}
             style={style.textInput}
@@ -124,7 +114,7 @@ export default class RegisterScreen extends Component {
             value={this.state.name}
             underlineColorAndroid={'transparent'}
           />
-          <Text>Date of Birth:</Text>
+          <Text style={{color: '#E0E0E0'}}>Date of Birth:</Text>
           <TextInput
             editable={this.state.editable}
             style={style.textInput}
@@ -133,7 +123,7 @@ export default class RegisterScreen extends Component {
             value={this.state.DOB}
             underlineColorAndroid={'transparent'}
           />
-          <Text>Password:</Text>
+          <Text style={{color: '#E0E0E0'}}>Password:</Text>
           <TextInput
             editable={this.state.editable}
             secureTextEntry={true}
@@ -143,7 +133,7 @@ export default class RegisterScreen extends Component {
             value={this.state.password}
             underlineColorAndroid={'transparent'}
           />
-          <Text>Confirm Password:</Text>
+          <Text style={{color: '#E0E0E0'}}>Confirm Password:</Text>
           <TextInput
             editable={this.state.editable}
             secureTextEntry={true}
@@ -153,18 +143,12 @@ export default class RegisterScreen extends Component {
             value={this.state.confirmPW}
             underlineColorAndroid={'transparent'}
           />
-          <RadioForm
-            radio_props={ToS}
-            initial={1}
-            onPress={value => { this.setState({ value: value }) }}
-            onPress={() => { this.setState({ check: 1 }) }}
-          />
           <Button style={style.button} onPress={this.signUp}>
             <Text style={style.btnText}>Sign Up</Text>
           </Button>
           {loading}
         </View>
-      </ScrollView>
+      </ScreenContainer>
     );
   }
 }
