@@ -9,7 +9,6 @@ import {
   Button,
   Item,
   Label,
-  Row
 } from 'native-base';
 import {
   Image,
@@ -17,10 +16,10 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
-  AsyncStorage
 } from 'react-native';
 
-import Header from '../components/Header'
+import Header from '../components/Header';
+import ScreenContainer from '../components/ScreenContainer';
 
 import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
@@ -61,7 +60,6 @@ export default class LoginScreen extends Component {
         hasMounted: true
       })
     }
-
   }
 
   getToken() {
@@ -112,16 +110,8 @@ export default class LoginScreen extends Component {
     }
 
     return (
-      <ScrollView style={styles.container}>
-        <Header back={false} title="Login" />
-
-        {/* <View style={styles.header}>
-          <Text style={styles.headerTitle}>
-            <Image source={require('../images/bulldog.png')} style={{ width: 40, height: 40 }} />
-            Login
-          </Text>
-        </View> */}
-        <Container>
+      <ScreenContainer>
+        <Header title="Login"/>
           <Card style={{ paddingBottom: 20 }}>
             {error}
             <Form>
@@ -142,36 +132,14 @@ export default class LoginScreen extends Component {
               <Button style={styles.buttonSigup} onPress={() => { navigate('Register') }}>
                 <Text style={{ textAlign: "center" }}>SignUp</Text>
               </Button>
-              <Text style={{ textDecorationLine: 'underline', color: '#0000FF' }}>Forgot Your{"\n"} Password?</Text>
             </View>
           </Card>
-        </Container>
-      </ScrollView>
+      </ScreenContainer>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-    backgroundColor: '#214786',
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginBottom: 10,
-    borderBottomColor: '#FFFFFF',
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    textAlign: "center",
-    paddingRight: 45
-  },
   buttonLogin: {
     backgroundColor: '#214786',
     alignSelf: "center",

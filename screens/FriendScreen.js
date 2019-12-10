@@ -7,26 +7,31 @@ import {
   View,
   TextInput,
   ScrollView,
+  TouchableOpacity,
   Image,
   ActivityIndicator,
   FlatList,
+  Platform,
 } from 'react-native';
-import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 import Header from '../components/Header';
+import ScreenContainer from '../components/ScreenContainer';
 
 export default class FriendScreen extends Component {
   constructor(props) {
     super(props);
+    this.props = props;
     this.state = {
       data: [],
     };
   }
-  componentWillMount() {
+  
+  componentDidMount() {
     this.fetchData();
   }
-  fetchData = async () => {
+
+  async fetchData() {
     const user = await api.getFriends()
     console.log(user)
     this.setState({ data: user.users });
@@ -48,19 +53,20 @@ export default class FriendScreen extends Component {
           bottomDivider
           leftAvatar={ {source:require('../images/stock_photo.jpg')}}
           onPress={() => {
-            this.props.navigation.navigate('GuestProfile', { user: friend });
+            this.props.navigation.navigate('ViewFriendProfile', { user: friend, isFriend: true });
           }} />
       );
     })
 
     return (
-      <ScrollView style={style.container}>
-        <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout }]} />
-        <View style={style.header}>
-          {friendList}
-        </View>
-
-      </ScrollView>
+      <ScreenContainer>
+        <ScrollView style={style.container}>
+          <Header back={true} title="Friend List" actions={[{ name: 'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out" }]} />
+          <View style={style.header}>
+            {friendList}
+          </View>
+        </ScrollView>
+      </ScreenContainer>
     );
   }
 }

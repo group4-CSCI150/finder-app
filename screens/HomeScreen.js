@@ -13,24 +13,15 @@ import {
   Easing,
   RefreshControl,
   ActivityIndicator,
-  LayoutAnimation,
   UIManager,
 } from 'react-native';
 import token from '../utils/tokenFunctions'
 import { MonoText } from '../components/StyledText';
 
 import ImageSwiper from '../components/ImageSwiper';
-import FadeInFromRightView from '../components/FadeInFromRightView';
+import FadeInView from '../components/FadeInView';
 import Header from '../components/Header';
-
-/*
-  Needed for LayoutAnimation to work on Android
-*/
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
-
+import ScreenContainer from '../components/ScreenContainer';
 
 function wait(timeout) {
   return new Promise(resolve => {
@@ -38,13 +29,12 @@ function wait(timeout) {
   });
 }
 
-
 function ActivityFeed(props) {
   [refreshing, setRefreshing] = useState(false);
 
   function onRefresh() {
     setRefreshing(true);
-    wait(3000).then(() => {
+    wait(2000).then(() => {
       setRefreshing(false);
     });
   }
@@ -54,131 +44,23 @@ function ActivityFeed(props) {
   });*/
 
   return (
-    <View style={styles.activityFeedContainer}>
-      <ScrollView refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.activityFeedHeader}>
-          <Text style={styles.activityFeedTextTitle}>Notifications</Text>
-        </View>
-        
-        <View style={styles.activityFeedContentContainer}>
-          <Text>
+    <View>
+      <View style={{padding: 15}}>
+        <Text style={[styles.text, {fontSize: 40}]}>Notifications</Text>
+        <View style={{width: '90%', height: 2, borderRadius: 1, borderColor: 'transparent', backgroundColor: 'rgba(200, 200, 200, 0.75)'}} />
+      </View>
+
+      <ScrollView style={{minHeight: '100%', padding: 15}} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={'#E0E0E0'} />
+        }>
+        <View style={{marginTop: 30}}>
+          <Text style={[styles.text, {fontSize: 20}]}>
             This is where new events, unread chat messages, etc. will be displayed.
           </Text> 
         </View>
       </ScrollView>
     </View>
   );
-}
-
-/*
-Component Wrapper for TouchableOpacity
-function myButton(props) {
-  return (
-    <View>
-      <View>
-        <TouchableOpacity {...props}>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}*/
-
-async function loadFriendRecommendation() {
-  /*
-  Placeholder definition
-  */
-  await wait(3000);
-
-  return {
-    id: 1,
-    name: 'Test User',
-    img1: 'image uri'
-  };
-}
-
-function FriendRecommendation(props) {
-
-  [shouldDisplayFriend, setShouldDisplayFriend] = useState(false);
-  [friendLoaded, setFriendLoaded] = useState(false);
-  [friendData, setFriendData] = useState( {} );
-
-  function onFindFriendPress() {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(
-        1000,
-        LayoutAnimation.Types.easeInEaseOut,
-        LayoutAnimation.Properties.opacity
-      )
-    );
-    setShouldDisplayFriend(true);
-  }
-
-  function onFriendRecClosePress() {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(
-        500,
-        LayoutAnimation.Types.easeInEaseOut,
-        LayoutAnimation.Properties.opacity
-      )
-    );
-    setShouldDisplayFriend(false);
-    setFriendLoaded(false);
-  }
-
-  if (!shouldDisplayFriend) {
-    return (
-      <View style={[styles.friendRecContainer, {height: 100}]}>
-        <View style={styles.centerContent}>
-          <TouchableOpacity style={styles.findFriendButton} onPress={onFindFriendPress}>
-            <View style={styles.centerContent}>
-              <Text style={{color: 'white'}}>Find a friend!</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-  else if (!friendLoaded) {
-    // Load friend recommendation
-    loadFriendRecommendation().then( (studentData) => {
-      /*
-      Use JSON friend data to display the recommendation
-      */
-     /*
-      Additional code to load images, etc. 
-      Then, setFriendLoaded(true);
-     */
-      setFriendLoaded(true);
-      setFriendData(studentData);
-    });
-    return (
-      <View style={styles.friendRecContainer}>
-        <View style={styles.centerContent}>
-          <ActivityIndicator size="large" color="#000000ff" />
-        </View>
-      </View>
-    );
-  }
-  else {
-    return (
-      <View style={styles.friendRecContainer}>
-        <FadeInFromRightView>
-          <Image source={require('../images/stock_photo.jpg')} style={styles.friendRecImage} />
-          <View style={styles.friendRecTextNameContainer}>
-            <Text style={styles.friendRecTextName}>{friendData.name}</Text> 
-          </View>
-          <View style={styles.friendRecCloseButtonContainer}>
-            <TouchableOpacity style={styles.friendRecCloseButton} onPress={onFriendRecClosePress}>
-              <Text>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </FadeInFromRightView>
-      </View>
-    );
-  }
 }
 
 export default function HomeScreen(props) {
@@ -189,96 +71,19 @@ export default function HomeScreen(props) {
     navigate('LoginNav')
   }
   return ( 
-    <SafeAreaView style={styles.appContainer}>
-      <Header actions={[{name:'Logout', action: logout }]}/>
-      <ScrollView bounces={'false'}> 
-        <ImageSwiper imgUris={['../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg',
-                              '../images/stock_photo.jpg', '../images/stock_photo.jpg', '../images/stock_photo.jpg']}
-                      height={400} />
+    <ScreenContainer>
+      <FadeInView>
+        <Header title={' '} actions={[{name:'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}]}/>        
         <ActivityFeed />
-        
-        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
-        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
-        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
-        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
-        <View><Text>Sample text sample text sample text sample text sample text sample text</Text></View>
-      </ScrollView>
-    </SafeAreaView>
+      </FadeInView>
+    </ScreenContainer>
   );
 }
 
 import Constants from 'expo-constants';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#555',
-    //marginTop: Constants.statusBarHeight
-  },
-  appContainer: {
-    backgroundColor: '#214786',
-  },
-  centerContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  activityFeedContainer: {
-    height: '100%',
-    backgroundColor: 'white',
-  },
-  activityFeedTextTitle: {
-    fontSize: 30,
-    color: 'black',
-  },
-  activityFeedContentContainer: {
-    marginTop: 10,
-  },
-  headerContainer: {
-    height: 50,
-    backgroundColor: '#214786',
-  },
-  header: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTextTitle: {
-    color: 'white',
-    fontSize: 30,
-  },
-  findFriendButton: {
-    backgroundColor: '#214786',
-    width: 120,
-    height: 60,
-  },
-  friendRecContainer: {
-    height: 350,
-    backgroundColor: '#ac1a2f',
-  },
-  friendRecImage: {
-    height: '100%',
-    maxWidth: '100%',
-    zIndex: -1,
-  },
-  friendRecTextNameContainer: {
-    zIndex: 1,
-    position: 'absolute',
-    bottom: 5,
-    left: 5,
-  },
-  friendRecTextName: {
-    fontSize: 40,
-    color: 'white',
-    textShadowColor: 'black',
-    textShadowRadius: 3,
-  },
-  friendRecCloseButtonContainer: {
-    zIndex: 1,
-    position: 'absolute',
-    top: 5,
-    left: 5,
+  text: {
+    color: '#E0E0E0',
   }
 });

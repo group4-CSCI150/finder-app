@@ -70,7 +70,7 @@ const ProfileStack = createStackNavigator(
   {
     Profile: ProfileScreen,
     Friend: FriendScreen,
-    GuestProfile: GuestProfileScreen,
+    ViewFriendProfile: GuestProfileScreen,
   },
   config
 );

@@ -8,11 +8,13 @@ import {
   ScrollView,
   View,
   Image,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Header from '../components/Header';
+import ScreenContainer from '../components/ScreenContainer';
+import FadeInView from '../components/FadeInView';
+import MyButton from '../components/MyButton';
 import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
 
 
@@ -20,7 +22,6 @@ import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 
 var listTags= [ "art", "reading", "writing", "dance", "cooking", "coding", "sports","gaming"];
-var selectedTags = [];
 
 export default class profilePage extends Component {
   constructor(props) {
@@ -30,11 +31,11 @@ export default class profilePage extends Component {
 
     this.state = {
       name: "Name",
+      age: "Age",
       desc: "Bio",
-      tag: "Interests",
+      tag: [],
       username: "",
       isEdit: false,  // editablity of text input - true when edit
-      isMulti: true,  // make able to do multiple lines when input text
       buttonName: "Edit Profile", // default - on button press, title will change to confirm changes
       pressStatus: false, // for changing color of button when edit
       changeButton: false, // change button style depending on if view or edit screen
@@ -56,7 +57,7 @@ export default class profilePage extends Component {
       {
         name: _user.name,
         desc: _user.description,
-        tag: _user.tags,
+        tag: _user.tags ? _user.tags : [],
         username: _user.username
       }
     )
@@ -115,86 +116,107 @@ export default class profilePage extends Component {
 
     let loading;
     if (this.state.loading) {
-      loading = <ActivityIndicator size="large" color="#0000ff" />
+      loading = <View style={{marginTop: 10}}><ActivityIndicator size="large" color="#FF6017" /></View>
     }
-    var i = -1;
+    var i = -1; 
     return (
-      <ScrollView style={style.container} behavior="padding">
-        <Header title="Profile" actions={[{name:'Logout', action: logout }]}/>
-        <View style={style.header}>
-          <View style={style.profilepicWrap}>
-            <Image source={require('../images/bulldog.png')} style={style.profilepic} />
-          </View>
+      <ScreenContainer>
+        <FadeInView>
+          <Header title="Profile" actions={[{name:'Logout', action: logout, iconName: Platform.OS === "ios" ? "ios-log-out" : "md-log-out"}]}/>
+          <ScrollView style={{minHeight: '100%'}} >
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{marginTop: 20}}>
+                <Image source={require('../images/stock_photo.jpg')} 
+                      style={{width: 250, height: 250, borderWidth: 2, borderRadius: 125, borderColor: '#E0E0E0'}}
+                />
+              </View>
 
+              <TextInput editable={this.state.isEdit}
+                multiline={false}
+                style={this.state.isEdit ? 
+                  {color: '#E0E0E0', fontSize: 38, marginTop: 10, borderWidth: 1, borderColor: '#E0E0E0', padding: 5} :
+                  {color: '#E0E0E0', fontSize: 38, marginTop: 10}}
+                //style={this.state.pressStatus ? style.textInput_style : style.default_profile}
+                onChangeText={(name) => this.setState({ name })}>
+                  {this.state.name}
+              </TextInput>
 
-          <TextInput editable={this.state.isEdit}
-            multiline={this.state.isMulti}
-            style={this.state.pressStatus ? style.textInput_style : style.default_profile}
-            onChangeText={(name) => this.setState({ name })}>
-            {this.state.name}</TextInput>
+              <TextInput editable={this.state.isEdit}
+                multiline={true}
+                style={this.state.isEdit ?
+                  {color: '#E0E0E0', padding: 10, fontSize: 20, marginTop: 10, width: '75%', borderWidth: 1, borderColor: '#E0E0E0'} :
+                  {color: '#E0E0E0', padding: 10, fontSize: 20, marginTop: 10, width: '75%'}}
+                //style={this.state.pressStatus ? style.textInput_style : style.default_profile}
+                onChangeText={(desc) => this.setState({ desc })}>
+                  {this.state.desc}
+              </TextInput>
+                  
+              <View style={{width: '75%', height: 2, marginTop: 10, backgroundColor: 'rgba(200, 200, 200, 0.75)'}} />
 
-          <TextInput editable={this.state.isEdit}
-            multiline={this.state.isMulti}
-            style={this.state.pressStatus ? style.textInput_style : style.default_profile}
-            onChangeText={(desc) => this.setState({ desc })}>
-            {this.state.desc}</TextInput>
-          <Select 
-            onSelect = {this.onSelect.bind(this)}
-            defaultText = {this.state.tag.toString()} 
-            textStyle = {this.state.isEdit ? style.tagFont_edit : style.tagFont_prof}
-            style = {this.state.pressStatus ? style.tagInput_style : style.default_tag}
-            transparent = {true}
-            optionListStyle = {{backgroundColor : "white"}}
-          >
-          {listTags.map(listTags => (
-          <Option 
-            key={listTags} value={listTags}>
-            {listTags}
-          </Option>
-          ))}
-          </Select>
-          <TouchableOpacity style={style.buttonConfirmContainer}
-            onPress={() => { this.props.navigation.navigate("Friend") }}>
-            <Text style={style.buttonFont}>Friend List</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={this.state.changeButton ? style.buttonConfirmContainer : style.buttonEditContainer}
-            onPress={this.state.isEdit ? this.handleSave : this.handleEdit}>
-            <Text style={style.buttonFont}>{this.state.buttonName}</Text>
-          </TouchableOpacity>
-          {loading}
-        </View>
-      </ScrollView>
+              <View style={{alignSelf: 'flex-start', marginTop: 30, marginLeft: 30}}>
+                <Text style={{fontSize: 22, color: '#E0E0E0'}}>Likes:</Text>
+              </View>
+              <Select 
+                onSelect = {this.onSelect.bind(this)}
+                defaultText = {this.state.tag ? this.state.tag.toString() : ''} 
+                textStyle = {{color: '#E0E0E0', fontSize: 20}}
+                style={{backgroundColor: 'rgba(150, 150, 150, 0.4)', marginTop: 10, 
+                        borderRadius: 30, borderColor: 'transparent', minWidth: '75%'}}
+                optionListStyle={{position: 'relative', bottom: 0, backgroundColor: '#E0E0E0'}}
+                //textStyle = {this.state.isEdit ? style.tagFont_edit : style.tagFont_prof}
+                //style = {this.state.pressStatus ? style.tagInput_style : style.default_tag}
+                transparent = {true}
+              >
+                {listTags.map(listTags => (
+                  <Option 
+                    key={listTags} value={listTags}>
+                    {listTags}
+                  </Option>
+                ))}
+              </Select>
 
+              <View style={{marginTop: 30}}>
+                <MyButton 
+                  onPress={this.state.isEdit ? this.handleSave : this.handleEdit}
+                  title={this.state.buttonName}
+                  iconName={this.state.isEdit ? undefined : Platform.OS === 'ios' ? 'ios-brush' : 'md-brush'}
+                  iconOnLeft={true}
+                />
+              </View>
+              {loading}
+              
+              <View style={{marginTop: 30}}>
+                <MyButton 
+                  onPress={() => { this.props.navigation.navigate("Friend") }}
+                  title={'Friend List'}
+                  iconName={Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward'}
+                />
+              </View>
+            </View>
+            <View style={{width: 0, height: 150}} />
+          </ScrollView>
+        </FadeInView>
+      </ScreenContainer>
     );
   }
-
 }
-
-
 
 // STYLE
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 
   buttonEditContainer: {
     height: 30,
-    paddingVertical: 20,
     backgroundColor: '#dc143c',
-    alignSelf: "center",
-    justifyContent: "center",
     marginTop: 30,
     width: '60%'
   },
 
   buttonConfirmContainer: {
     height: 30,
-    paddingVertical: 20,
     backgroundColor: '#214786',
-    alignSelf: "center",
-    justifyContent: "center",
     marginTop: 45,
     width: '60%'
   },
@@ -207,22 +229,6 @@ const style = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderColor: '#214786',
     borderWidth: 5
-  },
-
-  profilepicWrap: { // square profile pic
-    width: 225,
-    height: 225,
-    borderColor: '#214786',
-    borderWidth: 1
-  },
-
-  profilepic: {
-    flex: 1,
-    width: null,
-    alignSelf: 'stretch',
-    borderRadius: 100,
-    borderColor: '#fff',
-    borderWidth: 4
   },
 
   textInput_style: {

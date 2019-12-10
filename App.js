@@ -40,6 +40,7 @@ async function loadResourcesAsync() {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+      Arial: require('./assets/fonts/arial.ttf')
     }),
   ]);
 }
