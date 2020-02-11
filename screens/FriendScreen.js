@@ -1,16 +1,9 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import { ListItem } from 'react-native-elements'
-
 import {
   StyleSheet,
   View,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  FlatList,
   Platform,
 } from 'react-native';
 import api from '../utils/apiCaller'

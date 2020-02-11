@@ -1,21 +1,13 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React from 'react';
 import {
   Image,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
-  Button,
-  TextInput,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  Animated,
-  Easing,
   RefreshControl,
   ActivityIndicator,
-  LayoutAnimation,
-  UIManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';

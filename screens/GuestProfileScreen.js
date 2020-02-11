@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-    SafeAreaView,
-    TouchableOpacity,
     View,
     Text,
     ScrollView,
@@ -9,7 +7,6 @@ import {
     StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import ImageSwiper from '../components/ImageSwiper';
 import Header from '../components/Header';
 import ScreenContainer from '../components/ScreenContainer';

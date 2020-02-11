@@ -1,5 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -15,7 +13,7 @@ import Header from '../components/Header';
 import ScreenContainer from '../components/ScreenContainer';
 import FadeInView from '../components/FadeInView';
 import MyButton from '../components/MyButton';
-import {Select, SelectTextBox, Option, OptionList} from 'react-native-chooser';
+import {Select, Option} from 'react-native-chooser';
 
 
 import api from '../utils/apiCaller'

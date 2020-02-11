@@ -1,19 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React from 'react';
 import {
-  Image,
   Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
   SafeAreaView,
-  Animated,
-  Easing,
-  RefreshControl,
-  ActivityIndicator,
   LayoutAnimation,
-  UIManager,
 } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Header from '../components/Header';
@@ -21,23 +11,6 @@ import ScreenContainer from '../components/ScreenContainer';
 import api from '../utils/apiCaller';
 import token from '../utils/tokenFunctions';
 import ChatStorage from '../utils/chatStorage';
-
-function getChatUpdate() {
-  return [
-    {
-      _id: 1,
-      text: 'Hello',
-      createdAt: new Date(),
-      user: { _id: 2 }
-    },
-    {
-      _id: 2,
-      text: 'World',
-      createdAt: new Date(),
-      user: { _id: 2 }
-    },
-  ]
-}
 
 /*
 navigation parameters:

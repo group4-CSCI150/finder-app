@@ -1,4 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import {
   Text,
@@ -15,7 +14,6 @@ import {
 import Header from '../components/Header';
 import ScreenContainer from '../components/ScreenContainer';
 
-import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import validator from 'validator';
 

@@ -1,15 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-    SafeAreaView,
     View,
-    Image,
     Text,
-    TouchableOpacity,
-    Platform,
-    Dimensions,
-    ActivityIndicator,
-    ScrollView,
-    RefreshControl,
 } from 'react-native';
 
 import Header from '../components/Header';

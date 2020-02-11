@@ -1,7 +1,5 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import {
-  Container,
   Card,
   Text,
   Input,
@@ -11,8 +9,6 @@ import {
   Label,
 } from 'native-base';
 import {
-  Image,
-  ScrollView,
   StyleSheet,
   View,
   ActivityIndicator,
@@ -21,12 +17,9 @@ import {
 import Header from '../components/Header';
 import ScreenContainer from '../components/ScreenContainer';
 
-import { jsxExpressionContainer } from '@babel/types';
 import api from '../utils/apiCaller'
 import token from '../utils/tokenFunctions'
 var validator = require('validator');
-
-const Base64 = require('js-base64').Base64;
 
 export default class LoginScreen extends Component {
   constructor(props) {

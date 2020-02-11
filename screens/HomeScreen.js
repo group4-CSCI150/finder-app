@@ -1,24 +1,14 @@
-import * as WebBrowser from 'expo-web-browser';
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState} from 'react';
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  SafeAreaView,
-  Animated,
-  Easing,
   RefreshControl,
-  ActivityIndicator,
-  UIManager,
 } from 'react-native';
 import token from '../utils/tokenFunctions'
-import { MonoText } from '../components/StyledText';
 
-import ImageSwiper from '../components/ImageSwiper';
 import FadeInView from '../components/FadeInView';
 import Header from '../components/Header';
 import ScreenContainer from '../components/ScreenContainer';

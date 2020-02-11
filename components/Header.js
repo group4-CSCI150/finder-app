@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -10,7 +10,6 @@ import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import OptionsModal from './OptionsModal';
 import Constants from 'expo-constants';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 var HEADER_HEIGHT = 50;

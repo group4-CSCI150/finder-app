@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import {
-    View,
-    SafeAreaView,
     Platform,
 } from 'react-native';
 

@@ -1,9 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import {
-    View,
-    Animated,
-    Easing
-} from 'react-native';
+import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
